@@ -41,9 +41,16 @@ const isValidSavePair = function(pair) {
   return isOptionValid && isNumberValid;
 };
 
-const isValidQueryPair = function(pair) {
+const isValidId = function(id, allTransactions) {
+  let keys = Object.keys(allTransactions);
+  return keys.includes(id);
+};
+
+const isValidQueryPair = function(pair, allTransactions) {
   let isNumberValid = isValidNumber(pair[1]);
-  return pair[0] == "--empId" && isNumberValid;
+  return (
+    pair[0] == "--empId" && isNumberValid && isValidId(pair[1], allTransactions)
+  );
 };
 
 exports.isValidNumber = isValidNumber;
@@ -52,3 +59,4 @@ exports.isValidOption = isValidOption;
 exports.isValidBeverage = isValidBeverage;
 exports.isValidSavePair = isValidSavePair;
 exports.isValidQueryPair = isValidQueryPair;
+exports.isValidId = isValidId;

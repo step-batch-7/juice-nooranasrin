@@ -6,7 +6,8 @@ const {
   isValidNumber,
   isValidBeverage,
   isValidSavePair,
-  isValidQueryPair
+  isValidQueryPair,
+  isValidId
 } = validation;
 
 describe("testIsValidation", function() {
@@ -87,9 +88,18 @@ describe("testIsValidSavePair", function() {
 
 describe("testIsValidQueryPair", function() {
   it("should return true for option --empId and value is a number", function() {
-    assert.ok(isValidQueryPair(["--empId", "111"]));
+    assert.ok(isValidQueryPair(["--empId", "111"], { 111: [] }));
   });
   it("should return false for all other combinations", function() {
-    assert.ok(!isValidQueryPair(["--beverage", "123"]));
+    assert.ok(!isValidQueryPair(["--beverage", "123"], { 111: [] }));
+  });
+});
+
+describe("testIsValidId", function() {
+  it("should return true for existing id", function() {
+    assert.ok(isValidId("1", { 1: "hai" }));
+  });
+  it("should return false for not existing id", function() {
+    assert.ok(!isValidId("2", { 1: "hai" }));
   });
 });
