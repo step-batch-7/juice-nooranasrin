@@ -1,3 +1,28 @@
+const recordTransaction = require("./utilities").recordTransaction;
+
+const addNewTransaction = function(allTransactions, newTransaction, id) {
+  allTransactions[id].push(newTransaction);
+  return allTransactions;
+};
+
+const save = function(allTransactions, newTransaction, path) {
+  let id = Object.keys(newTransaction)[0];
+  if (!Object.keys(allTransactions).includes(id)) {
+    allTransactions[id] = [];
+  }
+  allTransactions = addNewTransaction(allTransactions, newTransaction[id], id);
+  recordTransaction(path, allTransactions);
+  let printingMsg =
+    "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n";
+  let savedDetails =
+    newTransaction[id]["beverage"] +
+    "," +
+    newTransaction[id]["qty"] +
+    "," +
+    newTransaction[id]["dateAndTime"];
+  return printingMsg + savedDetails;
+};
+
 const getTransactionDetails = function(id, allTransactions) {
   let beverage = allTransactions.beverage;
   let qty = allTransactions.qty;
@@ -28,3 +53,5 @@ const query = function(allTransactions, id) {
 exports.query = query;
 exports.total = total;
 exports.getTransactionDetails = getTransactionDetails;
+exports.save = save;
+exports.addNewTransaction = addNewTransaction;

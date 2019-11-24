@@ -1,6 +1,82 @@
 const assert = require("assert");
 const operations = require("../src/operations");
-const { query, total, getTransactionDetails } = operations;
+const {
+  query,
+  total,
+  getTransactionDetails,
+  save,
+  addNewTransaction
+} = operations;
+
+describe("testSave", function() {
+  let date = new Date();
+  it("it should push an object into the array of corresponding employee id ", function() {
+    let expected =
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
+      "\n" +
+      "orange,1," +
+      date;
+    let actual = save(
+      { "1": [] },
+      { 1: { beverage: "orange", qty: 1, dateAndTime: date } },
+      "./test/testFile"
+    );
+    assert.strictEqual(actual, expected);
+  });
+  it("should assign bvrg value to the beverage key of the corresponding object", function() {
+    let date = new Date();
+    let expected =
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
+      "\n" +
+      "orange,1," +
+      date;
+    let actual = save(
+      { "1": [] },
+      { 1: { beverage: "orange", qty: 1, dateAndTime: date } },
+      "./test/testFile"
+    );
+    assert.strictEqual(actual, expected);
+  });
+  it("should assign qty value to the quantity key of the corresponding object", function() {
+    let date = new Date();
+    let expected =
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
+      "\norange,1," +
+      date;
+    let actual = save(
+      { "1": [] },
+      { 1: { beverage: "orange", qty: 1, dateAndTime: date } },
+      "./test/testFile"
+    );
+    assert.strictEqual(actual, expected);
+  });
+  it("should assign date value to the dateAndTime key of the corresponding object", function() {
+    let date = new Date();
+    let expected =
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
+      "\norange,1," +
+      date;
+    let actual = save(
+      { "1": [] },
+      { 1: { beverage: "orange", qty: 1, dateAndTime: date } },
+      "./test/testFile"
+    );
+    assert.strictEqual(actual, expected);
+  });
+  it("should create an employee if employee is not there in record", function() {
+    let date = new Date();
+    let expected =
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
+      "\norange,1," +
+      date;
+    let actual = save(
+      { "1": [] },
+      { 2: { beverage: "orange", qty: 1, dateAndTime: date } },
+      "./test/testFile"
+    );
+    assert.strictEqual(actual, expected);
+  });
+});
 
 describe("testQuery", function() {
   let date = new Date();
@@ -11,13 +87,13 @@ describe("testQuery", function() {
       { 1: [{ beverage: "orange", qty: 3, dateAndTime: date }] },
       1
     );
-    assert.deepStrictEqual(actual, expected);
+    assert.strictEqual(actual, expected);
   });
   it("should return the printing msg with two new lines if the input object contains id and an empty array", function() {
     let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
     let expected = printingMsg + "\n" + "0";
     let actual = query({ 1: [] }, 1);
-    assert.deepStrictEqual(actual, expected);
+    assert.strictEqual(actual, expected);
   });
   it("should return the details of all transactions of that perticular employee", function() {
     let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
@@ -30,7 +106,7 @@ describe("testQuery", function() {
       ]
     };
     let actual = query(testInput, 1);
-    assert.deepStrictEqual(actual, expected);
+    assert.strictEqual(actual, expected);
   });
   it("should return total transactions of that perticular employee", function() {
     let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
@@ -43,7 +119,7 @@ describe("testQuery", function() {
       ]
     };
     let actual = query(testInput, 1);
-    assert.deepStrictEqual(actual, expected);
+    assert.strictEqual(actual, expected);
   });
 });
 
@@ -68,15 +144,15 @@ describe("testGetTransactionDetails", function() {
 
 describe("testTotal", function() {
   it("should return 0 if the qty is 0", function() {
-    assert.deepStrictEqual(total(0, { qty: 0 }), 0);
+    assert.strictEqual(total(0, { qty: 0 }), 0);
   });
   it("should return NaN if id the key is not present", function() {
-    assert.deepStrictEqual(total(0, { beverage: "orange" }), NaN);
+    assert.strictEqual(total(0, { beverage: "orange" }), NaN);
   });
   it("should return NaN if the object is empty", function() {
-    assert.deepStrictEqual(total(0, {}), NaN);
+    assert.strictEqual(total(0, {}), NaN);
   });
   it("should return the total if the quantity key is present", function() {
-    assert.deepStrictEqual(total(0, { qty: 6 }), 6);
+    assert.strictEqual(total(0, { qty: 6 }), 6);
   });
 });
