@@ -3,7 +3,8 @@ const performOperations = require("../src/performOperations");
 const {
   getPair,
   getNewTransactionObj,
-  performTransactions
+  performTransactions,
+  getUsageMsg
 } = performOperations;
 
 describe("testGetPair", function() {
@@ -87,5 +88,15 @@ describe("testPerformTransactions", function() {
     let cmdLineArg = ["--update", "--empId", "111"];
     let actual = performTransactions(cmdLineArg, date, {}, "./test/testFile");
     assert.deepStrictEqual(actual, expected);
+  });
+});
+
+describe("testGetUsageMsg", function() {
+  it("should return the specified message", function() {
+    let usageSave = "save ==> --save --beverage [beverageName]";
+    usageSave = usageSave + " --empId [empId] --qty [quantity]\n ";
+    let usageQuery = "query ==> --query --empId [existingEmployee]";
+    let expected = usageSave + usageQuery;
+    assert.deepStrictEqual(getUsageMsg(), expected);
   });
 });

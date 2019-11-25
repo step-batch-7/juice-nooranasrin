@@ -7,9 +7,8 @@ const getNewTransactionObj = function(cmdLineArg, date) {
   let id = cmdLineArg[cmdLineArg.indexOf("--empId") + 1];
   let qty = cmdLineArg[cmdLineArg.indexOf("--qty") + 1];
   let beverage = cmdLineArg[cmdLineArg.indexOf("--beverage") + 1];
-  let dateAndTime = date;
   let newTransaction = {
-    [id]: { beverage: beverage, qty: qty, dateAndTime: dateAndTime }
+    [id]: { beverage: beverage, qty: qty, dateAndTime: date }
   };
   return newTransaction;
 };
@@ -20,6 +19,13 @@ const getPair = function(cmdLineArg) {
     pairs.push([cmdLineArg[index], cmdLineArg[index + 1]]);
   }
   return pairs;
+};
+
+const getUsageMsg = function() {
+  let usageSave = "save ==> --save --beverage [beverageName]";
+  usageSave = usageSave + " --empId [empId] --qty [quantity]\n ";
+  let usageQuery = "query ==> --query --empId [existingEmployee]";
+  return usageSave + usageQuery;
 };
 
 const performTransactions = function(cmdLineArg, date, previousData, path) {
@@ -36,12 +42,10 @@ const performTransactions = function(cmdLineArg, date, previousData, path) {
     let id = cmdLineArg[cmdLineArg.indexOf("--empId") + 1];
     return query(previousData, id);
   }
-  let usageSave =
-    "save ==> --save --beverage [beverageName] --empId [empId] --qty [quantity]\n ";
-  let usageQuery = "query ==> --query --empId [existingEmployee]";
-  return usageSave + usageQuery;
+  return getUsageMsg();
 };
 
 exports.getPair = getPair;
 exports.getNewTransactionObj = getNewTransactionObj;
 exports.performTransactions = performTransactions;
+exports.getUsageMsg = getUsageMsg;
