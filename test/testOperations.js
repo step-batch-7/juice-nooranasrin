@@ -5,7 +5,10 @@ const {
   total,
   getTransactionDetails,
   save,
-  addNewTransaction
+  addNewTransaction,
+  getSaveMessage,
+  getQueryMessage,
+  getSavedDetails
 } = operations;
 
 describe("testSave", function() {
@@ -154,5 +157,34 @@ describe("testTotal", function() {
   });
   it("should return the total if the quantity key is present", function() {
     assert.strictEqual(total(0, { qty: 6 }), 6);
+  });
+});
+
+describe("getSaveMessage", function() {
+  it("should return the expected string back", function() {
+    let expected =
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n";
+    let actual = getSaveMessage();
+    assert.deepStrictEqual(actual, expected);
+  });
+});
+
+describe("getQueryMessage", function() {
+  it("should return the expected string back", function() {
+    let expected = "Employee ID,Beverage,Quantity,Date\n";
+    let actual = getQueryMessage();
+    assert.deepStrictEqual(actual, expected);
+  });
+});
+
+describe("getSaveDetails", function() {
+  it("should return the expected formatted string", function() {
+    let date = new Date();
+    let expected = "111,orange,3" + "," + date;
+    let testInput = {
+      111: { beverage: "orange", qty: "3", dateAndTime: date }
+    };
+    let actual = getSavedDetails(testInput, 111);
+    assert.deepStrictEqual(actual, expected);
   });
 });

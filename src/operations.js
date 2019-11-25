@@ -1,8 +1,31 @@
 const recordTransaction = require("./utilities").recordTransaction;
 
+const getSaveMessage = function() {
+  let printingMsg =
+    "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n";
+  return printingMsg;
+};
+
+const getQueryMessage = function() {
+  let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+  return printingMsg;
+};
+
 const addNewTransaction = function(allTransactions, newTransaction, id) {
   allTransactions[id].push(newTransaction);
   return allTransactions;
+};
+
+const getSavedDetails = function(newTransaction, id) {
+  let savedDetails =
+    id +
+    "," +
+    newTransaction[id]["beverage"] +
+    "," +
+    newTransaction[id]["qty"] +
+    "," +
+    newTransaction[id]["dateAndTime"];
+  return savedDetails;
 };
 
 const save = function(allTransactions, newTransaction, path) {
@@ -12,16 +35,9 @@ const save = function(allTransactions, newTransaction, path) {
   }
   allTransactions = addNewTransaction(allTransactions, newTransaction[id], id);
   recordTransaction(path, allTransactions);
-  let printingMsg =
-    "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n";
-  let savedDetails =
-    "," +
-    newTransaction[id]["beverage"] +
-    "," +
-    newTransaction[id]["qty"] +
-    "," +
-    newTransaction[id]["dateAndTime"];
-  return printingMsg + id + savedDetails;
+  let printingMsg = getSaveMessage();
+  let savedDetails = getSavedDetails(newTransaction, id);
+  return printingMsg + savedDetails;
 };
 
 const getTransactionDetails = function(id, allTransactions) {
@@ -42,7 +58,7 @@ const query = function(allTransactions, id) {
     getTransactionDetails.bind(null, id)
   );
   let totalTransactions = extractedTransactions.reduce(total, 0);
-  let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+  let printingMsg = getQueryMessage();
   return (
     printingMsg +
     transactionsStr.join("\n") +
@@ -56,3 +72,6 @@ exports.total = total;
 exports.getTransactionDetails = getTransactionDetails;
 exports.save = save;
 exports.addNewTransaction = addNewTransaction;
+exports.getSaveMessage = getSaveMessage;
+exports.getQueryMessage = getQueryMessage;
+exports.getSavedDetails = getSavedDetails;
