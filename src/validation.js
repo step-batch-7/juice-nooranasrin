@@ -3,7 +3,7 @@ const isValidLength = function(length, size) {
 };
 
 const isValidNumber = function(number) {
-  return !/\D/.test(number);
+  return Number.isInteger(+number) && +number > 0;
 };
 
 const isValidOption = function(option) {
