@@ -1,8 +1,8 @@
 const recordTransaction = require("./utilities").recordTransaction;
 
 const getSaveMessage = function() {
-  let printingMsg =
-    "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n";
+  let printingMsg = "Transaction Recorded:";
+  printingMsg = printingMsg + "\nEmployee ID, Beverage, Quantity, Date\n";
   return printingMsg;
 };
 
@@ -17,14 +17,10 @@ const addNewTransaction = function(allTransactions, newTransaction, id) {
 };
 
 const getSavedDetails = function(newTransaction, id) {
-  let savedDetails =
-    id +
-    "," +
-    newTransaction[id]["beverage"] +
-    "," +
-    newTransaction[id]["qty"] +
-    "," +
-    newTransaction[id]["dateAndTime"];
+  let savedDetails = id + ",";
+  savedDetails = savedDetails + newTransaction[id]["beverage"];
+  savedDetails = savedDetails + "," + newTransaction[id]["qty"];
+  savedDetails = savedDetails + "," + newTransaction[id]["dateAndTime"];
   return savedDetails;
 };
 
@@ -54,17 +50,12 @@ const total = function(sum, element) {
 
 const query = function(allTransactions, id) {
   let extractedTransactions = allTransactions[id];
-  let transactionsStr = extractedTransactions.map(
-    getTransactionDetails.bind(null, id)
-  );
-  let totalTransactions = extractedTransactions.reduce(total, 0);
+  let transactionsStr = extractedTransactions
+    .map(getTransactionDetails.bind(null, id))
+    .join("\n");
+  let totalTransactions = extractedTransactions.reduce(total, 0).toString();
   let printingMsg = getQueryMessage();
-  return (
-    printingMsg +
-    transactionsStr.join("\n") +
-    "\n" +
-    totalTransactions.toString()
-  );
+  return printingMsg + transactionsStr + "\n" + totalTransactions;
 };
 
 exports.query = query;
