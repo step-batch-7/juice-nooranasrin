@@ -4,11 +4,15 @@
   "description": "Beverage App for Anna Juice Ltd",
   "main": "beverage.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "node beverage.js --query --empId 111"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "mocha": "^6.2.2"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0"
   }
 }

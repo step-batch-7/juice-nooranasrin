@@ -1,1 +1,20 @@
-console.log("Anna Juice Ltd");
+const performTransactions = require("./src/performOperations")
+  .performTransactions;
+const getPreviousData = require("./src/utilities").getPreviousData;
+const chalk = require("chalk");
+
+const main = function(cmdLineArg) {
+  console.log(chalk.red("Anna Juice Ltd"));
+  let timeStamp = new Date();
+  let previousData = getPreviousData("./transactionDetails");
+  console.log(
+    performTransactions(
+      cmdLineArg,
+      timeStamp,
+      previousData,
+      "./transactionDetails"
+    )
+  );
+};
+
+main(process.argv.slice(2));

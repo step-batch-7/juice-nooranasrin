@@ -14,7 +14,7 @@ describe("testSave", function() {
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
       "\n" +
-      "orange,1," +
+      "1,orange,1," +
       date;
     let actual = save(
       { "1": [] },
@@ -28,7 +28,7 @@ describe("testSave", function() {
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
       "\n" +
-      "orange,1," +
+      "1,orange,1," +
       date;
     let actual = save(
       { "1": [] },
@@ -41,7 +41,7 @@ describe("testSave", function() {
     let date = new Date();
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
-      "\norange,1," +
+      "\n1,orange,1," +
       date;
     let actual = save(
       { "1": [] },
@@ -54,7 +54,7 @@ describe("testSave", function() {
     let date = new Date();
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
-      "\norange,1," +
+      "\n1,orange,1," +
       date;
     let actual = save(
       { "1": [] },
@@ -67,7 +67,7 @@ describe("testSave", function() {
     let date = new Date();
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
-      "\norange,1," +
+      "\n2,orange,1," +
       date;
     let actual = save(
       { "1": [] },

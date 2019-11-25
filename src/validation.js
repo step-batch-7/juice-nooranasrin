@@ -25,6 +25,7 @@ const isValidBeverage = function(beverage) {
     "lemon",
     "pineapple",
     "strawberry",
+    "banana",
     "carrot",
     "tomato"
   ];

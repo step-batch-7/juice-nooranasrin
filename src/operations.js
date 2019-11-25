@@ -15,12 +15,13 @@ const save = function(allTransactions, newTransaction, path) {
   let printingMsg =
     "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n";
   let savedDetails =
+    "," +
     newTransaction[id]["beverage"] +
     "," +
     newTransaction[id]["qty"] +
     "," +
     newTransaction[id]["dateAndTime"];
-  return printingMsg + savedDetails;
+  return printingMsg + id + savedDetails;
 };
 
 const getTransactionDetails = function(id, allTransactions) {
