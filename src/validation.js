@@ -29,7 +29,7 @@ const isValidBeverage = function(beverage) {
     "carrot",
     "tomato"
   ];
-  return beverages.includes(beverage);
+  return beverages.includes(beverage.toLowerCase());
 };
 
 const isValidSavePair = function(pair) {

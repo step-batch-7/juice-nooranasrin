@@ -23,7 +23,7 @@ describe("testGetPair", function() {
 });
 
 describe("testGetNewTransactionObj", function() {
-  let date = new Date();
+  let date = new Date().toJSON();
   it("should create a new object with specified keys", function() {
     let actual = getNewTransactionObj(
       ["--beverage", "orange", "--qty", "1", "--empId", "111"],
@@ -44,7 +44,7 @@ describe("testGetNewTransactionObj", function() {
 });
 
 describe("testPerformTransactions", function() {
-  let date = new Date();
+  let date = new Date().toJSON();
   it("should record transaction if the option is --save", function() {
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +

@@ -12,7 +12,7 @@ const {
 } = operations;
 
 describe("testSave", function() {
-  let date = new Date();
+  let date = new Date().toJSON();
   it("it should push an object into the array of corresponding employee id ", function() {
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
@@ -27,7 +27,7 @@ describe("testSave", function() {
     assert.strictEqual(actual, expected);
   });
   it("should assign bvrg value to the beverage key of the corresponding object", function() {
-    let date = new Date();
+    let date = new Date().toJSON();
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
       "\n" +
@@ -41,7 +41,7 @@ describe("testSave", function() {
     assert.strictEqual(actual, expected);
   });
   it("should assign qty value to the quantity key of the corresponding object", function() {
-    let date = new Date();
+    let date = new Date().toJSON();
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
       "\n1,orange,1," +
@@ -54,7 +54,7 @@ describe("testSave", function() {
     assert.strictEqual(actual, expected);
   });
   it("should assign date value to the dateAndTime key of the corresponding object", function() {
-    let date = new Date();
+    let date = new Date().toJSON();
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
       "\n1,orange,1," +
@@ -67,7 +67,7 @@ describe("testSave", function() {
     assert.strictEqual(actual, expected);
   });
   it("should create an employee if employee is not there in record", function() {
-    let date = new Date();
+    let date = new Date().toJSON();
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
       "\n2,orange,1," +
@@ -82,7 +82,7 @@ describe("testSave", function() {
 });
 
 describe("testQuery", function() {
-  let date = new Date();
+  let date = new Date().toJSON();
   it("should return total as the same quantity if the employee has only one transaction", function() {
     let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
     let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
@@ -179,7 +179,7 @@ describe("getQueryMessage", function() {
 
 describe("getSaveDetails", function() {
   it("should return the expected formatted string", function() {
-    let date = new Date();
+    let date = new Date().toJSON();
     let expected = "111,orange,3" + "," + date;
     let testInput = {
       111: { beverage: "orange", qty: "3", dateAndTime: date }

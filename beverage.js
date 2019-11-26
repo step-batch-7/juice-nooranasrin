@@ -5,7 +5,7 @@ const chalk = require("chalk");
 
 const main = function(cmdLineArg) {
   console.log(chalk.red("Anna Juice Ltd"));
-  let timeStamp = new Date();
+  let timeStamp = new Date().toJSON();
   let previousData = getPreviousData("./transactionDetails");
   console.log(
     performTransactions(
