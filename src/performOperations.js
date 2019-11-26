@@ -21,9 +21,10 @@ const performSaveCmd = function(args, date, previousData, path) {
   let savedDetails = save(previousData, newTransaction, path);
   return getSaveMessage() + getSavedDetails(newTransaction, id);
 };
+
 const performQueryCmd = function(args, date, previousData) {
   let id = args[args.indexOf("--empId") + 1];
-  let extractedTransaction = query(previousData, id);
+  let extractedTransaction = query(previousData, args);
   let totalTransaction = extractedTransaction.reduce(total, 0);
   extractedTransaction = extractedTransaction
     .map(getTransactionDetails.bind(null, id))

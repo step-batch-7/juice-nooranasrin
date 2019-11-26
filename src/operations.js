@@ -15,7 +15,8 @@ const save = function(allTransactions, newTransaction, path) {
   return newTransaction;
 };
 
-const query = function(allTransactions, id) {
+const query = function(allTransactions, args) {
+  let id = args[args.indexOf("--empId") + 1];
   let extractedTransactions = allTransactions[id];
   return extractedTransactions;
 };

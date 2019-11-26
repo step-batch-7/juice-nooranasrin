@@ -30,7 +30,7 @@ describe("testQuery", function() {
   let date = new Date().toJSON();
   it("should return an empty array if the value of the key of object is an empty array", function() {
     let expected = [];
-    let actual = query({ 1: [] }, 1);
+    let actual = query({ 1: [] }, ["--empId", "1"]);
     assert.deepStrictEqual(actual, expected);
   });
   it("should return the details of all transactions of that perticular employee", function() {
@@ -44,7 +44,7 @@ describe("testQuery", function() {
         { beverage: "apple", qty: 1, dateAndTime: 65 }
       ]
     };
-    let actual = query(testInput, 1);
+    let actual = query(testInput, ["--empId", "1"]);
     assert.deepStrictEqual(actual, expected);
   });
 });
