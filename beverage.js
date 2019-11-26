@@ -1,5 +1,4 @@
-const performTransactions = require("./src/performOperations")
-  .performTransactions;
+const executeCmd = require("./src/executeCmdLib.js").executeCmd;
 const getPreviousData = require("./src/utilities").getPreviousData;
 const chalk = require("chalk");
 
@@ -8,12 +7,7 @@ const main = function(cmdLineArg) {
   let timeStamp = new Date().toJSON();
   let previousData = getPreviousData("./transactionDetails.json");
   console.log(
-    performTransactions(
-      cmdLineArg,
-      timeStamp,
-      previousData,
-      "./transactionDetails.json"
-    )
+    executeCmd(cmdLineArg, timeStamp, previousData, "./transactionDetails.json")
   );
 };
 
