@@ -54,6 +54,18 @@ const isValidQueryPair = function(pair, allTransactions) {
   );
 };
 
+const isValidSaveArgs = function(pairs, cmdLineArg) {
+  let isValidSaveOptions = pairs.every(isValidSavePair);
+  let isValidSaveLength = isValidLength(cmdLineArg.length, 7);
+  return isValidSaveOptions && isValidSaveLength && cmdLineArg[0] == "--save";
+};
+
+const isValidQueryArgs = function(pairs, cmdLineArg, previousData) {
+  let isValidQueryOption = isValidQueryPair(pairs[0], previousData);
+  let isValidQueryLength = isValidLength(cmdLineArg.length, 3);
+  return isValidQueryOption && isValidQueryLength && cmdLineArg[0] == "--query";
+};
+
 exports.isValidNumber = isValidNumber;
 exports.isValidLength = isValidLength;
 exports.isValidOption = isValidOption;
@@ -61,3 +73,5 @@ exports.isValidBeverage = isValidBeverage;
 exports.isValidSavePair = isValidSavePair;
 exports.isValidQueryPair = isValidQueryPair;
 exports.isValidId = isValidId;
+exports.isValidSaveArgs = isValidSaveArgs;
+exports.isValidQueryArgs = isValidQueryArgs;

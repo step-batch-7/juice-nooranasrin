@@ -7,7 +7,9 @@ const {
   isValidBeverage,
   isValidSavePair,
   isValidQueryPair,
-  isValidId
+  isValidId,
+  isValidSaveArgs,
+  isValidQueryArgs
 } = validation;
 
 describe("testIsValidation", function() {
@@ -101,5 +103,57 @@ describe("testIsValidId", function() {
   });
   it("should return false for not existing id", function() {
     assert.ok(!isValidId("2", { 1: "hai" }));
+  });
+});
+
+describe("testIsValidSaveArgs", function() {
+  it("should return true for valid save arguments", function() {
+    let pairs = [
+      ["--beverage", "orange"],
+      ["--empId", "111"],
+      ["--qty", "1"]
+    ];
+    let cmdLineArg = [
+      "--save",
+      "--beverage",
+      "orange",
+      "--empId",
+      "111",
+      "--qty",
+      "1"
+    ];
+    assert.ok(isValidSaveArgs(pairs, cmdLineArg));
+  });
+  it("should return false for invalid save arguments", function() {
+    let pairs = [
+      ["--beverage", "orange"],
+      ["--empId", "111"],
+      ["--qty", "1"]
+    ];
+    let cmdLineArg = [
+      "--query",
+      "--beverage",
+      "orange",
+      "--empId",
+      "111",
+      "--qty",
+      "1"
+    ];
+    assert.ok(!isValidSaveArgs(pairs, cmdLineArg));
+  });
+});
+
+describe("testIsValidSaveArgs", function() {
+  it("should return true for valid query arguments", function() {
+    let pairs = [["--empId", "111"]];
+    let cmdLineArg = ["--query", "--empId", "111"];
+    let previousData = { "111": [] };
+    assert.ok(isValidQueryArgs(pairs, cmdLineArg, previousData));
+  });
+  it("should return false for invalid query arguments", function() {
+    let pairs = [["--empId", "111"]];
+    let cmdLineArg = ["--save", "--empId", "111"];
+    let previousData = { "111": [] };
+    assert.ok(!isValidQueryArgs(pairs, cmdLineArg, previousData));
   });
 });

@@ -1,7 +1,16 @@
 const validation = require("./validation");
-const { isValidLength, isValidSavePair, isValidQueryPair } = validation;
+const { isValidSaveArgs, isValidQueryArgs } = validation;
 const operations = require("./operations");
 const { save, query } = operations;
+const printMsg = require("./printingMessegeLib");
+const {
+  getSaveMessage,
+  getQueryMessage,
+  getSavedDetails,
+  getUsageMsg
+} = printMsg;
+const queryDetails = require("./queryDetailsLib");
+const { getTransactionDetails, total } = queryDetails;
 
 const getNewTransactionObj = function(cmdLineArg, date) {
   let id = cmdLineArg[cmdLineArg.indexOf("--empId") + 1];
@@ -21,26 +30,21 @@ const getPair = function(cmdLineArg) {
   return pairs;
 };
 
-const getUsageMsg = function() {
-  let usageSave = "save ==> --save --beverage [beverageName]";
-  usageSave = usageSave + " --empId [empId] --qty [quantity]\n ";
-  let usageQuery = "query ==> --query --empId [existingEmployee]";
-  return usageSave + usageQuery;
-};
-
-const performTransactions = function(cmdLineArg, date, previousData, path) {
-  let pairs = getPair(cmdLineArg.slice(1));
-  let isValidSaveOptions = pairs.every(isValidSavePair);
-  let isValidQueryOption = isValidQueryPair(pairs[0], previousData);
-  let isValidSaveLength = isValidLength(cmdLineArg.length, 7);
-  let isValidQueryLength = isValidLength(cmdLineArg.length, 3);
-  if (cmdLineArg[0] == "--save" && isValidSaveOptions && isValidSaveLength) {
-    let newTransaction = getNewTransactionObj(cmdLineArg, date);
-    return save(previousData, newTransaction, path);
+const performTransactions = function(args, date, previousData, path) {
+  let id = args[args.indexOf("--empId") + 1];
+  let pairs = getPair(args.slice(1));
+  if (isValidSaveArgs(pairs, args)) {
+    let newTransaction = getNewTransactionObj(args, date);
+    let savedDetails = save(previousData, newTransaction, path);
+    return getSaveMessage() + getSavedDetails(newTransaction, id);
   }
-  if (cmdLineArg[0] == "--query" && isValidQueryOption && isValidQueryLength) {
-    let id = cmdLineArg[cmdLineArg.indexOf("--empId") + 1];
-    return query(previousData, id);
+  if (isValidQueryArgs(pairs, args, previousData)) {
+    let extractedTransaction = query(previousData, id);
+    let totalTransaction = extractedTransaction.reduce(total, 0);
+    extractedTransaction = extractedTransaction
+      .map(getTransactionDetails.bind(null, id))
+      .join("\n");
+    return getQueryMessage() + extractedTransaction + "\n" + totalTransaction;
   }
   return getUsageMsg();
 };
@@ -48,4 +52,3 @@ const performTransactions = function(cmdLineArg, date, previousData, path) {
 exports.getPair = getPair;
 exports.getNewTransactionObj = getNewTransactionObj;
 exports.performTransactions = performTransactions;
-exports.getUsageMsg = getUsageMsg;
