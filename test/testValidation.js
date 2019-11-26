@@ -9,7 +9,8 @@ const {
   isValidQueryPair,
   isValidId,
   isValidSaveArgs,
-  isValidQueryArgs
+  isValidQueryArgs,
+  isValidDate
 } = validation;
 
 describe("testIsValidation", function() {
@@ -90,10 +91,13 @@ describe("testIsValidSavePair", function() {
 
 describe("testIsValidQueryPair", function() {
   it("should return true for option --empId and value is a number", function() {
-    assert.ok(isValidQueryPair(["--empId", "111"], { 111: [] }));
+    assert.ok(isValidQueryPair({ 111: [] }, ["--empId", "111"]));
+  });
+  it("should return true for option --date and valid date", function() {
+    assert.ok(isValidQueryPair({ 111: [] }, ["--date", "2000-2-1"]));
   });
   it("should return false for all other combinations", function() {
-    assert.ok(!isValidQueryPair(["--beverage", "123"], { 111: [] }));
+    assert.ok(!isValidQueryPair({ 111: [] }, ["--beverage", "123"]));
   });
 });
 
@@ -143,11 +147,18 @@ describe("testIsValidSaveArgs", function() {
   });
 });
 
-describe("testIsValidSaveArgs", function() {
+describe("testIsValidQueryArgs", function() {
   it("should return true for valid query arguments", function() {
     let pairs = [["--empId", "111"]];
     let cmdLineArg = ["--query", "--empId", "111"];
     let previousData = { "111": [] };
+    assert.ok(isValidQueryArgs(pairs, cmdLineArg, previousData));
+    pairs = [
+      ["--empId", "111"],
+      ["--date", "2000-2-9"]
+    ];
+    cmdLineArg = ["--query", "--empId", "111", "--date", "2000-2-9"];
+    previousData = { "111": [] };
     assert.ok(isValidQueryArgs(pairs, cmdLineArg, previousData));
   });
   it("should return false for invalid query arguments", function() {
@@ -155,5 +166,16 @@ describe("testIsValidSaveArgs", function() {
     let cmdLineArg = ["--save", "--empId", "111"];
     let previousData = { "111": [] };
     assert.ok(!isValidQueryArgs(pairs, cmdLineArg, previousData));
+  });
+});
+
+describe("testIsDateValid", function() {
+  it("should return true for all valid dates", function() {
+    assert.ok(isValidDate("2019-2-10"));
+    assert.ok(isValidDate("2000-2-29"));
+  });
+  it("should return false for all invalid dates", function() {
+    assert.ok(!isValidDate("2001-2-30"));
+    assert.ok(!isValidDate("0-0-0"));
   });
 });

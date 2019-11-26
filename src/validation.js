@@ -47,11 +47,20 @@ const isValidId = function(id, allTransactions) {
   return keys.includes(id);
 };
 
-const isValidQueryPair = function(pair, allTransactions) {
-  let isNumberValid = isValidNumber(pair[1]);
-  return (
-    pair[0] == "--empId" && isNumberValid && isValidId(pair[1], allTransactions)
-  );
+const isValidDate = function(date) {
+  let bits = date.split("-");
+  if (+bits[0] === 0) {
+    return false;
+  }
+  isDateValid = new Date(bits[0], bits[1] - 1, bits[2]);
+  return isValidDate && isDateValid.getMonth() + 1 == bits[1];
+};
+
+const isValidQueryPair = function(allTransactions, pair) {
+  let isIdValid = isValidNumber(pair[1]) && isValidId(pair[1], allTransactions);
+  let isDateValid = isValidDate(pair[1]);
+  isIdValid = isIdValid && pair[0] == "--empId";
+  return isIdValid || (pair[0] == "--date" && isDateValid);
 };
 
 const isValidSaveArgs = function(pairs, cmdLineArg) {
@@ -61,8 +70,11 @@ const isValidSaveArgs = function(pairs, cmdLineArg) {
 };
 
 const isValidQueryArgs = function(pairs, cmdLineArg, previousData) {
-  let isValidQueryOption = isValidQueryPair(pairs[0], previousData);
-  let isValidQueryLength = isValidLength(cmdLineArg.length, 3);
+  let length = cmdLineArg.length;
+  let isValidQueryOption = pairs.every(
+    isValidQueryPair.bind(null, previousData)
+  );
+  let isValidQueryLength = isValidLength(length, 3) || isValidLength(length, 5);
   return isValidQueryOption && isValidQueryLength && cmdLineArg[0] == "--query";
 };
 
@@ -75,3 +87,4 @@ exports.isValidQueryPair = isValidQueryPair;
 exports.isValidId = isValidId;
 exports.isValidSaveArgs = isValidSaveArgs;
 exports.isValidQueryArgs = isValidQueryArgs;
+exports.isValidDate = isValidDate;

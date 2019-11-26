@@ -6,7 +6,7 @@ const recordTransaction = function(path, transactionObj) {
 };
 
 const getPreviousData = function(path) {
-  if (!fs.existsSync(path)) {
+  if (!fs.existsSync(path) || fs.readFileSync(path, "utf8") == "") {
     fs.writeFileSync(path, "{}", "utf8");
   }
   let previousData = fs.readFileSync(path, "utf8");
