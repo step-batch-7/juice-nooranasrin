@@ -1,7 +1,9 @@
-const assert = require("assert");
+const assert = require("chai").assert;
 const executeCmdFunc = require("../src/executeCmdLib");
 const { getPair, executeCmd } = executeCmdFunc;
 const utilFunc = require("../src/utilities");
+
+//----------------------------testGetPair--------------------
 
 describe("testGetPair", function() {
   it("should return pairs for array conataining even number of elements", function() {
@@ -18,6 +20,8 @@ describe("testGetPair", function() {
   });
 });
 
+//---------------------------testExecuteCmd-------------------------
+
 describe("testExecuteCmd", function() {
   let date = new Date();
   it("should record transaction if the option is --save", function() {
@@ -26,15 +30,21 @@ describe("testExecuteCmd", function() {
     };
     const getBeverageRecord = function(path) {
       assert.equal("./test/testFile", path);
-      let previousData = { 111: [] };
+      let previousData = [{ id: "111" }];
       return previousData;
     };
     const recordTransaction = function(path, allTrans) {
       assert.equal("./test/testFile", path);
       assert.deepStrictEqual(
-        {
-          111: [{ beverage: "orange", qty: "2", dateAndTime: date.toJSON() }]
-        },
+        [
+          { id: "111" },
+          {
+            id: "111",
+            beverage: "orange",
+            qty: "2",
+            dateAndTime: date.toJSON()
+          }
+        ],
         allTrans
       );
     };
@@ -44,7 +54,7 @@ describe("testExecuteCmd", function() {
       generateDate: generateDate
     };
     let expected =
-      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
+      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date" +
       "\n" +
       "111,orange,2," +
       date.toJSON();
@@ -58,14 +68,15 @@ describe("testExecuteCmd", function() {
       "2"
     ];
     let actual = executeCmd(cmdLineArg, utilFunc, "./test/testFile");
-    assert.deepStrictEqual(actual, expected);
+    assert.strictEqual(actual, expected);
   });
+
   it("should return transactions if the option is --query", function() {
     const getBeverageRecord = function(path) {
       assert.equal("./test/testFile", path);
-      let previousData = {
-        1: [{ beverage: "orange", qty: 3, dateAndTime: date }]
-      };
+      let previousData = [
+        { id: "1", beverage: "orange", qty: 3, dateAndTime: date }
+      ];
       return previousData;
     };
     let utilFunc = { getBeverageRecord: getBeverageRecord };
@@ -75,6 +86,7 @@ describe("testExecuteCmd", function() {
     let actual = executeCmd(cmdLineArg, utilFunc, "./test/testFile");
     assert.deepStrictEqual(actual, expected);
   });
+
   it("should return usage if the input is not valid", function() {
     let usageSave =
       "save ==> --save --beverage [beverageName] --empId [empId] --qty [quantity]\n ";
@@ -84,9 +96,9 @@ describe("testExecuteCmd", function() {
     usageQuery = usageQuery + "--query --date [valid date]";
     const getBeverageRecord = function(path) {
       assert.equal("./test/testFile", path);
-      let previousData = {
-        1: [{ beverage: "orange", qty: 3, dateAndTime: date }]
-      };
+      let previousData = [
+        { beverage: "orange", qty: 3, dateAndTime: date, id: "2345" }
+      ];
       return previousData;
     };
     let utilFunc = { getBeverageRecord: getBeverageRecord };

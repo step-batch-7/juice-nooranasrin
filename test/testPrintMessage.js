@@ -1,40 +1,50 @@
-const assert = require("assert");
+const assert = require("chai").assert;
 const printMsg = require("../src/printingMessegeLib");
 const {
   getSaveMessage,
-  getQueryMessage,
-  getSavedDetails,
+  getHeader,
+  getTransactionDetails,
   getUsageMsg
 } = printMsg;
 
+//-------------------------getSaveMessage-------------------------------
+
 describe("getSaveMessage", function() {
   it("should return the expected string back", function() {
-    let expected =
-      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n";
+    let expected = "Transaction Recorded:\n";
     let actual = getSaveMessage();
     assert.deepStrictEqual(actual, expected);
   });
 });
 
-describe("getQueryMessage", function() {
+//---------------------------getHeader---------------------------
+
+describe("getHeader", function() {
   it("should return the expected string back", function() {
     let expected = "Employee ID,Beverage,Quantity,Date\n";
-    let actual = getQueryMessage();
+    let actual = getHeader();
     assert.deepStrictEqual(actual, expected);
   });
 });
 
-describe("getSaveDetails", function() {
+//----------------------------getTransactionDetails---------------------------
+
+describe("getTransactionDetails", function() {
   it("should return the expected formatted string", function() {
     let date = new Date().toJSON();
     let expected = "111,orange,3" + "," + date;
     let testInput = {
-      111: { beverage: "orange", qty: "3", dateAndTime: date }
+      id: "111",
+      beverage: "orange",
+      qty: "3",
+      dateAndTime: date
     };
-    let actual = getSavedDetails(testInput, 111);
+    let actual = getTransactionDetails(testInput, 111);
     assert.deepStrictEqual(actual, expected);
   });
 });
+
+//--------------------------------testGetUsageMsg--------------------
 
 describe("testGetUsageMsg", function() {
   it("should return the specified message", function() {

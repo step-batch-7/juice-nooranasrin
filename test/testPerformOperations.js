@@ -1,4 +1,4 @@
-const assert = require("assert");
+const assert = require("chai").assert;
 const performOperations = require("../src/performOperations");
 const {
   getNewTransactionObj,
@@ -7,10 +7,10 @@ const {
   total,
   getTransactionDetails,
   performQueryCmd,
-  performSaveCmd,
-  extractEachEmpForTotal,
-  extractEachEmp
+  performSaveCmd
 } = performOperations;
+
+//-----------------------testGetNewTransactionObj------------------------
 
 describe("testGetNewTransactionObj", function() {
   let date = new Date().toJSON();
@@ -20,21 +20,30 @@ describe("testGetNewTransactionObj", function() {
       date
     );
     let expected = {
-      "111": { beverage: "orange", qty: "1", dateAndTime: date }
+      id: "111",
+      beverage: "orange",
+      qty: "1",
+      dateAndTime: date
     };
+
     assert.deepStrictEqual(actual, expected);
   });
   it("should assign undefined if the key is not exist", function() {
     let actual = getNewTransactionObj([], date);
     let expected = {
-      undefined: { beverage: undefined, qty: undefined, dateAndTime: date }
+      id: undefined,
+      beverage: undefined,
+      qty: undefined,
+      dateAndTime: date
     };
     assert.deepStrictEqual(actual, expected);
   });
 });
 
+//------------------------testPerformSaveCmd------------------------------
+
 describe("testPerformSaveCmd", function() {
-  it("should record transaction if the option is --save", function() {
+  it("should record transaction when the option is --save", function() {
     let date = new Date();
     const generateDate = function() {
       return date;
@@ -42,12 +51,15 @@ describe("testPerformSaveCmd", function() {
     const recordTransaction = function(path, allTrans) {
       assert.equal("./test/testFile", path);
       assert.deepStrictEqual(
-        {
-          "111": [
-            { beverage: "orange", qty: 1, dateAndTime: date.toJSON() },
-            { beverage: "orange", qty: "2", dateAndTime: date.toJSON() }
-          ]
-        },
+        [
+          { id: "111", beverage: "orange", qty: 1, dateAndTime: date.toJSON() },
+          {
+            id: "111",
+            beverage: "orange",
+            qty: "2",
+            dateAndTime: date.toJSON()
+          }
+        ],
         allTrans
       );
     };
@@ -56,7 +68,7 @@ describe("testPerformSaveCmd", function() {
       recordTransaction: recordTransaction
     };
     let expected =
-      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
+      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date" +
       "\n" +
       "111,orange,2," +
       date.toJSON();
@@ -71,7 +83,7 @@ describe("testPerformSaveCmd", function() {
     ];
     let actual = performSaveCmd(
       cmdLineArg,
-      { "111": [{ beverage: "orange", qty: 1, dateAndTime: date.toJSON() }] },
+      [{ id: "111", beverage: "orange", qty: 1, dateAndTime: date.toJSON() }],
       utilFunc,
       "./test/testFile"
     );
@@ -79,47 +91,36 @@ describe("testPerformSaveCmd", function() {
   });
 });
 
+//----------------------------testPerformQueryCmd-----------------------------
+
 describe("testPerformQueryCmd", function() {
-  it("should return transactions if the option is --query", function() {
+  it("should return transactions when the option is --query", function() {
     let date = new Date();
     let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
     let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
     let cmdLineArg = ["--query", "--empId", "1"];
     let actual = performQueryCmd(
       cmdLineArg,
-      { 1: [{ beverage: "orange", qty: 3, dateAndTime: date }] },
+      [{ id: "1", beverage: "orange", qty: 3, dateAndTime: date }],
       "./test/testFile"
     );
     assert.deepStrictEqual(actual, expected);
   });
 });
 
-describe("testExtractEachEmp", function() {
-  it("should return separate details of each transaction", function() {
-    let id = "111";
-    let date = new Date();
-    let empTrans = [{ beverage: "orange", dateAndTime: date, qty: "4" }];
-    let actual = extractEachEmp(id, empTrans);
-    let expected = "111,orange,4," + date;
-    assert.deepStrictEqual(actual, expected);
-  });
-});
+//----------------------------testTotal-----------------------------
 
-describe("testExtractEachEmpForTotal", function() {
-  it("should give the total of quantity of input", function() {
-    let date = new Date();
-    let sum = 0;
-    let empTrans = [{ beverage: "orange", dateAndTime: date, qty: "4" }];
-    let actual = extractEachEmpForTotal(sum, empTrans);
-    let expected = 4;
-    assert.deepStrictEqual(actual, expected);
-    sum = 0;
-    empTrans = [
-      { beverage: "orange", dateAndTime: date, qty: "4" },
-      { beverage: "orange", dateAndTime: date, qty: "3" }
-    ];
-    actual = extractEachEmpForTotal(sum, empTrans);
-    expected = 7;
-    assert.deepStrictEqual(actual, expected);
+describe("testTotal", function() {
+  it("should return 0 if the qty is 0", function() {
+    assert.strictEqual(total(0, { qty: 0 }), 0);
+  });
+  it("should return NaN if id the key is not present", function() {
+    assert.isNaN(total(0, { beverage: "orange" }));
+  });
+  it("should return NaN if the object is empty", function() {
+    assert.isNaN(total(0, {}));
+  });
+  it("should return the total if the quantity key is present", function() {
+    assert.strictEqual(total(0, { qty: 6 }), 6);
   });
 });

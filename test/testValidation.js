@@ -1,4 +1,4 @@
-const assert = require("assert");
+const assert = require("chai").assert;
 const validation = require("../src/validation");
 const {
   isValidLength,
@@ -13,7 +13,9 @@ const {
   isValidDate
 } = validation;
 
-describe("testIsValidation", function() {
+//-------------------------testIsValidLength------------------------
+
+describe("testIsValidLength", function() {
   it("should return true if the length equal to the size", function() {
     assert.ok(isValidLength(4, 4));
   });
@@ -21,6 +23,8 @@ describe("testIsValidation", function() {
     assert.ok(!isValidLength(4, 6));
   });
 });
+
+//-----------------------------testIsValidNumber---------------------
 
 describe("testIsValidNumber", function() {
   it("should give true for positive intiger", function() {
@@ -37,6 +41,8 @@ describe("testIsValidNumber", function() {
   });
 });
 
+//-------------------------------testIsValidOption--------------------
+
 describe("testIsValidOption", function() {
   it("should return true if the option is --beverage", function() {
     assert.ok(isValidOption("--beverage"));
@@ -51,6 +57,8 @@ describe("testIsValidOption", function() {
     assert.ok(!isValidOption("--shape"));
   });
 });
+
+//----------------------------testIsValidBeverage-------------------
 
 describe("testIsValidBeverage", function() {
   it("should retur true for all available juices", function() {
@@ -74,6 +82,8 @@ describe("testIsValidBeverage", function() {
   });
 });
 
+//------------------------------testIsValidSavePair---------------------------
+
 describe("testIsValidSavePair", function() {
   it("should return true for option --beverage and value is an available juice", function() {
     assert.ok(isValidSavePair(["--beverage", "mango"]));
@@ -89,26 +99,32 @@ describe("testIsValidSavePair", function() {
   });
 });
 
+//------------------------------testIsValidQueryPair---------------------------
+
 describe("testIsValidQueryPair", function() {
   it("should return true for option --empId and value is a number", function() {
-    assert.ok(isValidQueryPair({ 111: [] }, ["--empId", "111"]));
+    assert.ok(isValidQueryPair([{ id: "111" }], ["--empId", "111"]));
   });
   it("should return true for option --date and valid date", function() {
-    assert.ok(isValidQueryPair({ 111: [] }, ["--date", "2000-2-1"]));
+    assert.ok(isValidQueryPair([{ id: "111" }], ["--date", "2000-2-1"]));
   });
   it("should return false for all other combinations", function() {
-    assert.ok(!isValidQueryPair({ 111: [] }, ["--beverage", "123"]));
+    assert.ok(!isValidQueryPair([{ id: "111" }], ["--beverage", "123"]));
   });
 });
 
+//-------------------------------testIsValidId--------------------------------
+
 describe("testIsValidId", function() {
   it("should return true for existing id", function() {
-    assert.ok(isValidId("1", { 1: "hai" }));
+    assert.ok(isValidId("1", { id: "1" }));
   });
   it("should return false for not existing id", function() {
-    assert.ok(!isValidId("2", { 1: "hai" }));
+    assert.notOk(isValidId("2", { id: "1" }));
   });
 });
+
+//---------------------------------estIsValidSaveArgs--------------------------
 
 describe("testIsValidSaveArgs", function() {
   it("should return true for valid save arguments", function() {
@@ -147,27 +163,31 @@ describe("testIsValidSaveArgs", function() {
   });
 });
 
+//----------------------------------testIsValidQueryArgs---------------------
+
 describe("testIsValidQueryArgs", function() {
   it("should return true for valid query arguments", function() {
     let pairs = [["--empId", "111"]];
     let cmdLineArg = ["--query", "--empId", "111"];
-    let previousData = { "111": [] };
+    let previousData = [{ id: "111" }];
     assert.ok(isValidQueryArgs(pairs, cmdLineArg, previousData));
     pairs = [
       ["--empId", "111"],
       ["--date", "2000-2-9"]
     ];
     cmdLineArg = ["--query", "--empId", "111", "--date", "2000-2-9"];
-    previousData = { "111": [] };
+    previousData = [{ id: "111" }];
     assert.ok(isValidQueryArgs(pairs, cmdLineArg, previousData));
   });
   it("should return false for invalid query arguments", function() {
     let pairs = [["--empId", "111"]];
     let cmdLineArg = ["--save", "--empId", "111"];
-    let previousData = { "111": [] };
+    let previousData = [{ id: "111" }];
     assert.ok(!isValidQueryArgs(pairs, cmdLineArg, previousData));
   });
 });
+
+//---------------------testIsDateValid---------------------------
 
 describe("testIsDateValid", function() {
   it("should return true for all valid dates", function() {

@@ -1,6 +1,8 @@
-const assert = require("assert");
+const assert = require("chai").assert;
 const utilities = require("../src/utilities.js");
 const { getBeverageRecord } = utilities;
+
+//------------------------testBeverageRecord-----------------------
 
 describe("testBeverageRecord", function() {
   it("should create file if the file is already exists", function() {

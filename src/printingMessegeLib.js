@@ -1,20 +1,19 @@
 const getSaveMessage = function() {
-  let printingMsg = "Transaction Recorded:";
-  printingMsg = printingMsg + "\nEmployee ID, Beverage, Quantity, Date\n";
+  let printingMsg = "Transaction Recorded:\n";
   return printingMsg;
 };
 
-const getQueryMessage = function() {
+const getHeader = function() {
   let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
   return printingMsg;
 };
 
-const getSavedDetails = function(newTransaction, id) {
-  let savedDetails = id + ",";
-  savedDetails = savedDetails + newTransaction[id]["beverage"];
-  savedDetails = savedDetails + "," + newTransaction[id]["qty"];
-  savedDetails = savedDetails + "," + newTransaction[id]["dateAndTime"];
-  return savedDetails;
+const getTransactionDetails = function(transaction) {
+  let id = transaction["id"];
+  let beverage = transaction["beverage"];
+  let qty = transaction["qty"];
+  let date = transaction["dateAndTime"];
+  return `${id},${beverage},${qty},${date}`;
 };
 
 const getUsageMsg = function() {
@@ -28,6 +27,6 @@ const getUsageMsg = function() {
 };
 
 exports.getSaveMessage = getSaveMessage;
-exports.getQueryMessage = getQueryMessage;
-exports.getSavedDetails = getSavedDetails;
+exports.getHeader = getHeader;
+exports.getTransactionDetails = getTransactionDetails;
 exports.getUsageMsg = getUsageMsg;

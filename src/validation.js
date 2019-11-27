@@ -42,9 +42,8 @@ const isValidSavePair = function(pair) {
   return isOptionValid && isNumberValid;
 };
 
-const isValidId = function(id, allTransactions) {
-  let keys = Object.keys(allTransactions);
-  return keys.includes(id);
+const isValidId = function(id, transactionDetails) {
+  return transactionDetails["id"] == id;
 };
 
 const isValidDate = function(date) {
@@ -57,7 +56,8 @@ const isValidDate = function(date) {
 };
 
 const isValidQueryPair = function(allTransactions, pair) {
-  let isIdValid = isValidNumber(pair[1]) && isValidId(pair[1], allTransactions);
+  let isIdValid = allTransactions.filter(isValidId.bind(null, pair[1]));
+  isIdValid = isIdValid.length > 0 && isValidNumber(pair[1]);
   let isDateValid = isValidDate(pair[1]);
   isIdValid = isIdValid && pair[0] == "--empId";
   return isIdValid || (pair[0] == "--date" && isDateValid);
