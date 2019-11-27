@@ -5,7 +5,7 @@ const recordTransaction = function(path, transactionObj) {
   fs.writeFileSync(path, transactionStr, "utf8");
 };
 
-const getPreviousData = function(path) {
+const getBeverageRecord = function(path) {
   if (!fs.existsSync(path) || fs.readFileSync(path, "utf8") == "") {
     fs.writeFileSync(path, "{}", "utf8");
   }
@@ -13,5 +13,10 @@ const getPreviousData = function(path) {
   return JSON.parse(previousData);
 };
 
-exports.getPreviousData = getPreviousData;
+const generateDate = function() {
+  return new Date();
+};
+
+exports.getBeverageRecord = getBeverageRecord;
 exports.recordTransaction = recordTransaction;
+exports.generateDate = generateDate;

@@ -5,13 +5,13 @@ const addNewTransaction = function(allTransactions, newTransaction, id) {
   return allTransactions;
 };
 
-const save = function(allTransactions, newTransaction, path) {
+const save = function(allTransactions, newTransaction, path, utilFuc) {
   let id = Object.keys(newTransaction)[0];
   if (!Object.keys(allTransactions).includes(id)) {
     allTransactions[id] = [];
   }
   allTransactions = addNewTransaction(allTransactions, newTransaction[id], id);
-  recordTransaction(path, allTransactions);
+  utilFuc.recordTransaction(path, allTransactions);
   return newTransaction;
 };
 

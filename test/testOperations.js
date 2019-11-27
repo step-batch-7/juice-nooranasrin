@@ -9,24 +9,51 @@ const {
 } = operations;
 
 describe("testSave", function() {
-  let date = new Date().toJSON();
   it("it should push an object into the array of corresponding employee id ", function() {
-    let expected = { 1: { beverage: "orange", qty: 1, dateAndTime: date } };
+    let date = new Date();
+    let expected = {
+      "1": { beverage: "orange", qty: "1", dateAndTime: date.toJSON() }
+    };
+    const recordTransaction = function(path, allTrans) {
+      assert.equal("./test/testFile", path);
+      assert.deepStrictEqual(
+        {
+          "1": [{ beverage: "orange", qty: "1", dateAndTime: date.toJSON() }]
+        },
+        allTrans
+      );
+    };
+    let utilFunc = { recordTransaction, recordTransaction };
     let actual = save(
       { "1": [] },
-      { 1: { beverage: "orange", qty: 1, dateAndTime: date } },
-      "./test/testFile"
+      { "1": { beverage: "orange", qty: "1", dateAndTime: date.toJSON() } },
+      "./test/testFile",
+      utilFunc
     );
     assert.deepStrictEqual(actual, expected);
   });
 
   it("should create an employee if employee is not there in record", function() {
-    let date = new Date().toJSON();
-    let expected = { 2: { beverage: "orange", qty: 1, dateAndTime: date } };
+    let date = new Date();
+    let expected = {
+      2: { beverage: "orange", qty: "2", dateAndTime: date.toJSON() }
+    };
+    const recordTransaction = function(path, allTrans) {
+      assert.equal("./test/testFile", path);
+      assert.deepStrictEqual(
+        {
+          "1": [],
+          "2": [{ beverage: "orange", qty: "2", dateAndTime: date.toJSON() }]
+        },
+        allTrans
+      );
+    };
+    let utilFunc = { recordTransaction: recordTransaction };
     let actual = save(
       { "1": [] },
-      { 2: { beverage: "orange", qty: 1, dateAndTime: date } },
-      "./test/testFile"
+      { "2": { beverage: "orange", qty: "2", dateAndTime: date.toJSON() } },
+      "./test/testFile",
+      utilFunc
     );
     assert.deepStrictEqual(actual, expected);
   });

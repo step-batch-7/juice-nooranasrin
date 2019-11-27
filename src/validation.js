@@ -53,7 +53,7 @@ const isValidDate = function(date) {
     return false;
   }
   let isDateValid = new Date(bits[0], bits[1] - 1, bits[2]);
-  return isDateValid && isDateValid.getMonth() + 1 == bits[1];
+  return isDateValid.getMonth() + 1 == bits[1];
 };
 
 const isValidQueryPair = function(allTransactions, pair) {

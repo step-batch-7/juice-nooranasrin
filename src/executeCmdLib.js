@@ -13,16 +13,17 @@ const getPair = function(cmdLineArg) {
   return pairs;
 };
 
-const executeCmd = function(args, date, previousData, path) {
+const executeCmd = function(args, utilFunc, path) {
   let transactionFuncs = {
     "--save": performSaveCmd,
     "--query": performQueryCmd
   };
+  let previousData = utilFunc.getBeverageRecord(path);
   let pairs = getPair(args.slice(1));
   let isArgsValid = isValidSaveArgs(pairs, args);
   isArgsValid = isArgsValid || isValidQueryArgs(pairs, args, previousData);
   if (isArgsValid) {
-    return transactionFuncs[args[0]](args, date, previousData, path);
+    return transactionFuncs[args[0]](args, previousData, utilFunc, path);
   }
   return getUsageMsg();
 };

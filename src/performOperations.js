@@ -15,10 +15,11 @@ const getNewTransactionObj = function(cmdLineArg, date) {
   return newTransaction;
 };
 
-const performSaveCmd = function(args, date, previousData, path) {
+const performSaveCmd = function(args, previousData, utilFunc, path) {
+  let date = utilFunc.generateDate().toJSON();
   let id = args[args.indexOf("--empId") + 1];
   let newTransaction = getNewTransactionObj(args, date);
-  let savedDetails = save(previousData, newTransaction, path);
+  let savedDetails = save(previousData, newTransaction, path, utilFunc);
   return getSaveMessage() + getSavedDetails(newTransaction, id);
 };
 
@@ -31,7 +32,7 @@ const extractEachEmpForTotal = function(sum, empTrans) {
   return sum;
 };
 
-const performQueryCmd = function(args, date, previousData) {
+const performQueryCmd = function(args, previousData) {
   let id = args[args.indexOf("--empId") + 1];
   let extractedTrans = [executeEmpIdQuery(previousData, args)];
   if (args.includes("--date")) {

@@ -1,14 +1,11 @@
 const executeCmd = require("./src/executeCmdLib.js").executeCmd;
-const getPreviousData = require("./src/utilities").getPreviousData;
+const utilFunc = require("./src/utilities");
 const chalk = require("chalk");
 
 const main = function(cmdLineArg) {
   console.log(chalk.red("Anna Juice Ltd"));
-  let timeStamp = new Date().toJSON();
-  let previousData = getPreviousData("./transactionDetails.json");
-  console.log(
-    executeCmd(cmdLineArg, timeStamp, previousData, "./transactionDetails.json")
-  );
+  let path = "./transactionDetails.json";
+  console.log(executeCmd(cmdLineArg, utilFunc, path));
 };
 
 main(process.argv.slice(2));

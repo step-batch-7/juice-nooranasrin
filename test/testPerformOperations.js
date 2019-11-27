@@ -35,12 +35,31 @@ describe("testGetNewTransactionObj", function() {
 
 describe("testPerformSaveCmd", function() {
   it("should record transaction if the option is --save", function() {
-    let date = new Date().toJSON();
+    let date = new Date();
+    const generateDate = function() {
+      return date;
+    };
+    const recordTransaction = function(path, allTrans) {
+      assert.equal("./test/testFile", path);
+      assert.deepStrictEqual(
+        {
+          "111": [
+            { beverage: "orange", qty: 1, dateAndTime: date.toJSON() },
+            { beverage: "orange", qty: "2", dateAndTime: date.toJSON() }
+          ]
+        },
+        allTrans
+      );
+    };
+    let utilFunc = {
+      generateDate: generateDate,
+      recordTransaction: recordTransaction
+    };
     let expected =
       "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
       "\n" +
       "111,orange,2," +
-      date;
+      date.toJSON();
     let cmdLineArg = [
       "--save",
       "--beverage",
@@ -52,8 +71,8 @@ describe("testPerformSaveCmd", function() {
     ];
     let actual = performSaveCmd(
       cmdLineArg,
-      date,
-      { 1: [{ beverage: "orange", qty: 1, dateAndTime: date }] },
+      { "111": [{ beverage: "orange", qty: 1, dateAndTime: date.toJSON() }] },
+      utilFunc,
       "./test/testFile"
     );
     assert.deepStrictEqual(actual, expected);
@@ -68,7 +87,6 @@ describe("testPerformQueryCmd", function() {
     let cmdLineArg = ["--query", "--empId", "1"];
     let actual = performQueryCmd(
       cmdLineArg,
-      date,
       { 1: [{ beverage: "orange", qty: 3, dateAndTime: date }] },
       "./test/testFile"
     );
