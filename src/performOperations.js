@@ -1,5 +1,5 @@
 const operations = require("./operations");
-const { save, query } = operations;
+const { save, executeEmpIdQuery, executeDateQuery } = operations;
 const printMsg = require("./printingMessegeLib");
 const { getSaveMessage, getQueryMessage, getSavedDetails } = printMsg;
 const queryDetails = require("./queryDetailsLib");
@@ -22,16 +22,28 @@ const performSaveCmd = function(args, date, previousData, path) {
   return getSaveMessage() + getSavedDetails(newTransaction, id);
 };
 
+const extractEachEmp = function(id, empTrans) {
+  return empTrans.map(getTransactionDetails.bind(null, id)).join("\n");
+};
+
+const extractEachEmpForTotal = function(sum, empTrans) {
+  sum = empTrans.reduce(total, sum);
+  return sum;
+};
+
 const performQueryCmd = function(args, date, previousData) {
   let id = args[args.indexOf("--empId") + 1];
-  let extractedTransaction = query(previousData, args);
-  let totalTransaction = extractedTransaction.reduce(total, 0);
-  extractedTransaction = extractedTransaction
-    .map(getTransactionDetails.bind(null, id))
-    .join("\n");
-  return getQueryMessage() + extractedTransaction + "\n" + totalTransaction;
+  let extractedTrans = [executeEmpIdQuery(previousData, args)];
+  if (args.includes("--date")) {
+    extractedTrans = executeDateQuery(previousData, args);
+  }
+  let totalTrans = extractedTrans.reduce(extractEachEmpForTotal, 0);
+  extractedTrans = extractedTrans.map(extractEachEmp.bind(null, id)).join("\n");
+  return getQueryMessage() + extractedTrans + "\n" + totalTrans;
 };
 
 exports.getNewTransactionObj = getNewTransactionObj;
 exports.performSaveCmd = performSaveCmd;
 exports.performQueryCmd = performQueryCmd;
+exports.extractEachEmpForTotal = extractEachEmpForTotal;
+exports.extractEachEmp = extractEachEmp;

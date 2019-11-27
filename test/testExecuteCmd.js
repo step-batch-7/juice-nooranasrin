@@ -57,7 +57,10 @@ describe("testExecuteCmd", function() {
   it("should return usage if the input is not valid", function() {
     let usageSave =
       "save ==> --save --beverage [beverageName] --empId [empId] --qty [quantity]\n ";
-    let usageQuery = "query ==> --query --empId [existingEmployee]";
+    let usageQuery = "query ==> --query --empId [existingEmployee]\n\t";
+    usageQuery =
+      usageQuery + "--query --empId [existingEmployee] --date [valid date]\n\t";
+    usageQuery = usageQuery + "--query --date [valid date]";
     let expected = usageSave + usageQuery;
     let cmdLineArg = ["--update", "--empId", "111"];
     let actual = executeCmd(cmdLineArg, date, {}, "./test/testFile");

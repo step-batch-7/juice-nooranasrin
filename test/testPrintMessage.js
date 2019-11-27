@@ -40,8 +40,11 @@ describe("testGetUsageMsg", function() {
   it("should return the specified message", function() {
     let usageSave = "save ==> --save --beverage [beverageName]";
     usageSave = usageSave + " --empId [empId] --qty [quantity]\n ";
-    let usageQuery = "query ==> --query --empId [existingEmployee]";
+    let usageQuery = "query ==> --query --empId [existingEmployee]\n\t";
+    usageQuery =
+      usageQuery + "--query --empId [existingEmployee] --date [valid date]\n\t";
+    usageQuery = usageQuery + "--query --date [valid date]";
     let expected = usageSave + usageQuery;
-    assert.deepStrictEqual(getUsageMsg(), expected);
+    assert.strictEqual(getUsageMsg(), expected);
   });
 });

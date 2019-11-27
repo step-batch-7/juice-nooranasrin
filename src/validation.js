@@ -52,8 +52,8 @@ const isValidDate = function(date) {
   if (+bits[0] === 0) {
     return false;
   }
-  isDateValid = new Date(bits[0], bits[1] - 1, bits[2]);
-  return isValidDate && isDateValid.getMonth() + 1 == bits[1];
+  let isDateValid = new Date(bits[0], bits[1] - 1, bits[2]);
+  return isDateValid && isDateValid.getMonth() + 1 == bits[1];
 };
 
 const isValidQueryPair = function(allTransactions, pair) {

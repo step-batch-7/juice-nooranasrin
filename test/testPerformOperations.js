@@ -7,7 +7,9 @@ const {
   total,
   getTransactionDetails,
   performQueryCmd,
-  performSaveCmd
+  performSaveCmd,
+  extractEachEmpForTotal,
+  extractEachEmp
 } = performOperations;
 
 describe("testGetNewTransactionObj", function() {
@@ -70,6 +72,36 @@ describe("testPerformQueryCmd", function() {
       { 1: [{ beverage: "orange", qty: 3, dateAndTime: date }] },
       "./test/testFile"
     );
+    assert.deepStrictEqual(actual, expected);
+  });
+});
+
+describe("testExtractEachEmp", function() {
+  it("should return separate details of each transaction", function() {
+    let id = "111";
+    let date = new Date();
+    let empTrans = [{ beverage: "orange", dateAndTime: date, qty: "4" }];
+    let actual = extractEachEmp(id, empTrans);
+    let expected = "111,orange,4," + date;
+    assert.deepStrictEqual(actual, expected);
+  });
+});
+
+describe("testExtractEachEmpForTotal", function() {
+  it("should give the total of quantity of input", function() {
+    let date = new Date();
+    let sum = 0;
+    let empTrans = [{ beverage: "orange", dateAndTime: date, qty: "4" }];
+    let actual = extractEachEmpForTotal(sum, empTrans);
+    let expected = 4;
+    assert.deepStrictEqual(actual, expected);
+    sum = 0;
+    empTrans = [
+      { beverage: "orange", dateAndTime: date, qty: "4" },
+      { beverage: "orange", dateAndTime: date, qty: "3" }
+    ];
+    actual = extractEachEmpForTotal(sum, empTrans);
+    expected = 7;
     assert.deepStrictEqual(actual, expected);
   });
 });

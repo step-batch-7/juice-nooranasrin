@@ -20,7 +20,10 @@ const getSavedDetails = function(newTransaction, id) {
 const getUsageMsg = function() {
   let usageSave = "save ==> --save --beverage [beverageName]";
   usageSave = usageSave + " --empId [empId] --qty [quantity]\n ";
-  let usageQuery = "query ==> --query --empId [existingEmployee]";
+  let usageQuery = "query ==> --query --empId [existingEmployee]\n\t";
+  usageQuery =
+    usageQuery + "--query --empId [existingEmployee] --date [valid date]\n\t";
+  usageQuery = usageQuery + "--query --date [valid date]";
   return usageSave + usageQuery;
 };
 
