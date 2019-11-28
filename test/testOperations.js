@@ -6,7 +6,8 @@ const {
   addNewTransaction,
   isTransOfTheDay,
   executeDateQuery,
-  isThisEmployee
+  isKeyPresent,
+  executeBeverageQuery
 } = operations;
 
 //-----------------------------------------testSave-----------------------------------
@@ -196,14 +197,71 @@ describe("testAddNewTransaction", function() {
     assert.deepStrictEqual(actual, expected);
   });
 });
-//--------------------------testIsThisEmployee-----------------------//
-describe("testIsThisEmployee", function() {
-  it("should return true when the employee exists", function() {
-    let actual = isThisEmployee("1", { id: "1" });
+//--------------------------testIsKeyPresent-----------------------//
+describe("testIsKeyPresent", function() {
+  it("should return true when the value is present", function() {
+    let actual = isKeyPresent("1", "id", { id: "1" });
     assert.isTrue(actual);
   });
-  it("should return false when the employee is not exist", function() {
-    let actual = isThisEmployee("2", { id: "1" });
+  it("should return false when the value is not present", function() {
+    let actual = isKeyPresent("2", "beverage", { beverage: "orange" });
     assert.isFalse(actual);
+  });
+});
+
+//-----------------------------testExecuteBeverageQuery------------//
+describe("testExecuteBeverageQuery", function() {
+  it("should return transactions of a perticular beverage when input contains only beverage", function() {
+    let beverageRecord = [
+      { beverage: "orange", id: "111", qty: "1" },
+      { beverage: "apple", id: "111", qty: "1" }
+    ];
+    let args = ["--beverage", "orange"];
+    let actual = executeBeverageQuery(beverageRecord, args);
+    let expected = [{ beverage: "orange", id: "111", qty: "1" }];
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should return transactions of an employee on a beverage when input contains both empId and beverage", function() {
+    let beverageRecord = [
+      { beverage: "orange", id: "111", qty: "1" },
+      { beverage: "orange", id: "112", qty: "1" }
+    ];
+    let args = ["--beverage", "orange", "--empId", "111"];
+    let actual = executeBeverageQuery(beverageRecord, args);
+    let expected = [{ beverage: "orange", id: "111", qty: "1" }];
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should return transactions of a beverage on a day when input contains both date and beverage", function() {
+    let date = new Date().toJSON();
+    let beverageRecord = [
+      { beverage: "orange", id: "111", qty: "1", dateAndTime: date },
+      { beverage: "apple", id: "112", qty: "1", dateAndTime: date }
+    ];
+    let args = ["--beverage", "orange", "--date", "2019-11-28"];
+    let actual = executeBeverageQuery(beverageRecord, args);
+    let expected = [
+      { beverage: "orange", id: "111", qty: "1", dateAndTime: date }
+    ];
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should return transactions of a beverage on a day of an employee when input contains empId,date and beverage", function() {
+    let date = new Date().toJSON();
+    let beverageRecord = [
+      { beverage: "orange", id: "111", qty: "1", dateAndTime: date },
+      { beverage: "orange", id: "112", qty: "1", dateAndTime: date }
+    ];
+    let args = [
+      "--beverage",
+      "orange",
+      "--date",
+      "2019-11-28",
+      "--empId",
+      "111"
+    ];
+    let actual = executeBeverageQuery(beverageRecord, args);
+    let expected = [
+      { beverage: "orange", id: "111", qty: "1", dateAndTime: date }
+    ];
+    assert.deepStrictEqual(actual, expected);
   });
 });

@@ -1,5 +1,10 @@
 const operations = require("./operations");
-const { save, executeEmpIdQuery, executeDateQuery } = operations;
+const {
+  save,
+  executeEmpIdQuery,
+  executeDateQuery,
+  executeBeverageQuery
+} = operations;
 const printMsg = require("./printingMessegeLib");
 const { getSaveMessage, getHeader, getTransactionDetails } = printMsg;
 
@@ -31,10 +36,12 @@ const performSaveCmd = function(args, previousData, utilFunc, path) {
 };
 
 const performQueryCmd = function(args, previousData) {
-  let id = args[args.indexOf("--empId") + 1];
   let extractedTrans = executeEmpIdQuery(previousData, args);
   if (args.includes("--date")) {
     extractedTrans = executeDateQuery(previousData, args);
+  }
+  if (args.includes("--beverage")) {
+    extractedTrans = executeBeverageQuery(previousData, args);
   }
   let totalTrans = extractedTrans.reduce(total, 0);
   extractedTrans = extractedTrans.map(getTransactionDetails).join("\n");

@@ -12,14 +12,19 @@ const save = function(beverageRecords, newTransaction, path, utilFuc) {
   return [newTransaction];
 };
 
-const isThisEmployee = function(id, transaction) {
-  return transaction["id"] === id;
+const isKeyPresent = function(value, key, transaction) {
+  return transaction[key] === value;
 };
 
 const executeEmpIdQuery = function(beverageRecords, args) {
-  let id = args[args.indexOf("--empId") + 1];
-  return beverageRecords.filter(isThisEmployee.bind(null, id));
+  let empId = args[args.indexOf("--empId") + 1];
+  return beverageRecords.filter(isKeyPresent.bind(null, empId, "id"));
 };
+
+// const executeQuery = function(beverageRecords, args, option, key) {
+//   let value = args[args.indexOf(option) + 1];
+//   return beverageRecords.filter(isKeyPresent.bind(null, value, key));
+// };
 
 const isTransOfTheDay = function(date, transaction) {
   let transDate = new Date(transaction["dateAndTime"]);
@@ -39,9 +44,23 @@ const executeDateQuery = function(beverageRecords, args) {
   return beverageLog.filter(isTransOfTheDay.bind(null, date));
 };
 
+const executeBeverageQuery = function(beverageRecords, args) {
+  let beverageLog = beverageRecords.slice();
+  let beverage = args[args.indexOf("--beverage") + 1];
+  if (args.includes("--empId")) {
+    beverageLog = executeEmpIdQuery(beverageRecords, args);
+  }
+  if (args.includes("--date")) {
+    beverageLog = executeDateQuery(beverageRecords, args);
+  }
+  return beverageLog.filter(isKeyPresent.bind(null, beverage, "beverage"));
+};
+
 exports.executeEmpIdQuery = executeEmpIdQuery;
 exports.save = save;
 exports.addNewTransaction = addNewTransaction;
 exports.executeDateQuery = executeDateQuery;
 exports.isTransOfTheDay = isTransOfTheDay;
-exports.isThisEmployee = isThisEmployee;
+exports.isKeyPresent = isKeyPresent;
+exports.executeBeverageQuery = executeBeverageQuery;
+// exports.executeQuery = executeQuery;

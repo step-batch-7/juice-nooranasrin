@@ -56,8 +56,11 @@ const isValidQueryPair = function(allTransactions, pair) {
   let isIdValid = allTransactions.filter(isValidId.bind(null, pair[1]));
   isIdValid = isIdValid.length > 0 && isValidNumber(pair[1]);
   let isDateValid = isValidDate(pair[1]);
+  let isBeverageValid = isValidBeverage(pair[1]);
+  isBeverageValid = isBeverageValid && pair[0] == "--beverage";
   isIdValid = isIdValid && pair[0] == "--empId";
-  return isIdValid || (pair[0] == "--date" && isDateValid);
+  isDateValid = isDateValid && pair[0] == "--date";
+  return isIdValid || isDateValid || isBeverageValid;
 };
 
 const isValidSaveArgs = function(pairs, cmdLineArg) {
@@ -71,7 +74,10 @@ const isValidQueryArgs = function(pairs, cmdLineArg, previousData) {
   let isValidQueryOption = pairs.every(
     isValidQueryPair.bind(null, previousData)
   );
-  let isValidQueryLength = isValidLength(length, 3) || isValidLength(length, 5);
+  let isValidQueryLength =
+    isValidLength(length, 3) ||
+    isValidLength(length, 5) ||
+    isValidLength(length, 7);
   return isValidQueryOption && isValidQueryLength && cmdLineArg[0] == "--query";
 };
 
