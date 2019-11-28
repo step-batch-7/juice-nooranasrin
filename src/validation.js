@@ -48,11 +48,8 @@ const isValidId = function(id, transactionDetails) {
 
 const isValidDate = function(date) {
   let bits = date.split("-");
-  if (+bits[0] === 0) {
-    return false;
-  }
   let isDateValid = new Date(bits[0], bits[1] - 1, bits[2]);
-  return isDateValid.getMonth() + 1 == bits[1];
+  return isDateValid.getMonth() + 1 == bits[1] && bits[0] != 0;
 };
 
 const isValidQueryPair = function(allTransactions, pair) {

@@ -191,11 +191,19 @@ describe("testIsValidQueryArgs", function() {
 
 describe("testIsDateValid", function() {
   it("should return true for all valid dates", function() {
-    assert.ok(isValidDate("2019-2-10"));
-    assert.ok(isValidDate("2000-2-29"));
+    assert.isTrue(isValidDate("2019-2-10"));
+    assert.isTrue(isValidDate("2000-2-29"));
+    assert.isTrue(isValidDate("2000-02-1"));
+    assert.isTrue(isValidDate("2000-12-1"));
+    assert.isTrue(isValidDate("2000-12-31"));
   });
   it("should return false for all invalid dates", function() {
-    assert.ok(!isValidDate("2001-2-30"));
-    assert.ok(!isValidDate("0-0-0"));
+    assert.isFalse(isValidDate("2001-2-30"));
+    assert.isFalse(isValidDate("0-0-0"));
+    assert.isFalse(isValidDate("0-2-1"));
+    assert.isFalse(isValidDate("2000-2-30"));
+    assert.isFalse(isValidDate("2000-3-32"));
+    assert.isFalse(isValidDate("2000-13-30"));
+    assert.isFalse(isValidDate("date"));
   });
 });

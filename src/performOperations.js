@@ -3,12 +3,12 @@ const { save, executeEmpIdQuery, executeDateQuery } = operations;
 const printMsg = require("./printingMessegeLib");
 const { getSaveMessage, getHeader, getTransactionDetails } = printMsg;
 
-const total = function(sum, element) {
-  let quantity = +element.qty;
-  return sum + quantity;
+const total = function(totalQty, transaction) {
+  let quantity = +transaction.qty;
+  return totalQty + quantity;
 };
 
-const getNewTransactionObj = function(cmdLineArg, date) {
+const getNewTransaction = function(cmdLineArg, date) {
   let id = cmdLineArg[cmdLineArg.indexOf("--empId") + 1];
   let qty = cmdLineArg[cmdLineArg.indexOf("--qty") + 1];
   let beverage = cmdLineArg[cmdLineArg.indexOf("--beverage") + 1];
@@ -24,7 +24,7 @@ const getNewTransactionObj = function(cmdLineArg, date) {
 const performSaveCmd = function(args, previousData, utilFunc, path) {
   let date = utilFunc.generateDate().toJSON();
   let id = args[args.indexOf("--empId") + 1];
-  let newTransaction = getNewTransactionObj(args, date);
+  let newTransaction = getNewTransaction(args, date);
   let savedDetails = save(previousData, newTransaction, path, utilFunc);
   savedDetails = savedDetails.map(getTransactionDetails);
   return getSaveMessage() + getHeader() + savedDetails;
@@ -41,7 +41,7 @@ const performQueryCmd = function(args, previousData) {
   return getHeader() + extractedTrans + "\n" + totalTrans;
 };
 
-exports.getNewTransactionObj = getNewTransactionObj;
+exports.getNewTransaction = getNewTransaction;
 exports.performSaveCmd = performSaveCmd;
 exports.performQueryCmd = performQueryCmd;
 exports.total = total;

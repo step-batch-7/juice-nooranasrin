@@ -24,7 +24,7 @@ describe("testGetPair", function() {
 
 describe("testExecuteCmd", function() {
   let date = new Date();
-  it("should record transaction if the option is --save", function() {
+  it("should record transaction when the option is --save", function() {
     const generateDate = function() {
       return date;
     };
@@ -71,7 +71,7 @@ describe("testExecuteCmd", function() {
     assert.strictEqual(actual, expected);
   });
 
-  it("should return transactions if the option is --query", function() {
+  it("should return transactions of an employee when the option is --query and value is empId", function() {
     const getBeverageRecord = function(path) {
       assert.equal("./test/testFile", path);
       let previousData = [
@@ -83,6 +83,38 @@ describe("testExecuteCmd", function() {
     let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
     let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
     let cmdLineArg = ["--query", "--empId", "1"];
+    let actual = executeCmd(cmdLineArg, utilFunc, "./test/testFile");
+    assert.deepStrictEqual(actual, expected);
+  });
+
+  it("should return all transactions of a perticular day when the option is --query and value is a date", function() {
+    const getBeverageRecord = function(path) {
+      assert.equal("./test/testFile", path);
+      let previousData = [
+        { id: "1", beverage: "orange", qty: 3, dateAndTime: date }
+      ];
+      return previousData;
+    };
+    let utilFunc = { getBeverageRecord: getBeverageRecord };
+    let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+    let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
+    let cmdLineArg = ["--query", "--date", "2019-11-28"];
+    let actual = executeCmd(cmdLineArg, utilFunc, "./test/testFile");
+    assert.deepStrictEqual(actual, expected);
+  });
+
+  it("should return transactions of an employee in a day when the option is --query and values are id and date", function() {
+    const getBeverageRecord = function(path) {
+      assert.equal("./test/testFile", path);
+      let previousData = [
+        { id: "1", beverage: "orange", qty: 3, dateAndTime: date }
+      ];
+      return previousData;
+    };
+    let utilFunc = { getBeverageRecord: getBeverageRecord };
+    let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+    let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
+    let cmdLineArg = ["--query", "--date", "2019-11-28", "--empId", "1"];
     let actual = executeCmd(cmdLineArg, utilFunc, "./test/testFile");
     assert.deepStrictEqual(actual, expected);
   });

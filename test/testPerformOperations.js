@@ -1,7 +1,7 @@
 const assert = require("chai").assert;
 const performOperations = require("../src/performOperations");
 const {
-  getNewTransactionObj,
+  getNewTransaction,
   getUsageMsg,
   addNewTransaction,
   total,
@@ -14,8 +14,12 @@ const {
 
 describe("testGetNewTransactionObj", function() {
   let date = new Date().toJSON();
+  it("should return an object", function() {
+    let actual = getNewTransaction([], date);
+    assert.isObject(actual);
+  });
   it("should create a new object with specified keys", function() {
-    let actual = getNewTransactionObj(
+    let actual = getNewTransaction(
       ["--beverage", "orange", "--qty", "1", "--empId", "111"],
       date
     );
@@ -28,8 +32,8 @@ describe("testGetNewTransactionObj", function() {
 
     assert.deepStrictEqual(actual, expected);
   });
-  it("should assign undefined if the key is not exist", function() {
-    let actual = getNewTransactionObj([], date);
+  it("should assign undefined when the input doesnot contains the expected values", function() {
+    let actual = getNewTransaction([], date);
     let expected = {
       id: undefined,
       beverage: undefined,
@@ -43,7 +47,7 @@ describe("testGetNewTransactionObj", function() {
 //------------------------testPerformSaveCmd------------------------------
 
 describe("testPerformSaveCmd", function() {
-  it("should record transaction when the option is --save", function() {
+  it("should save the input transaction", function() {
     let date = new Date();
     const generateDate = function() {
       return date;
@@ -94,7 +98,7 @@ describe("testPerformSaveCmd", function() {
 //----------------------------testPerformQueryCmd-----------------------------
 
 describe("testPerformQueryCmd", function() {
-  it("should return transactions when the option is --query", function() {
+  it("should return transactions of an employee when the input contains only empId", function() {
     let date = new Date();
     let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
     let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
@@ -106,21 +110,45 @@ describe("testPerformQueryCmd", function() {
     );
     assert.deepStrictEqual(actual, expected);
   });
+  it("should return all transactions of the day when the input contains only date", function() {
+    let date = new Date();
+    let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+    let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
+    let cmdLineArg = ["--query", "--date", "2019-11-28"];
+    let actual = performQueryCmd(
+      cmdLineArg,
+      [{ id: "1", beverage: "orange", qty: 3, dateAndTime: date }],
+      "./test/testFile"
+    );
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should return transactions of an employee in a day when the input contains both empId and date", function() {
+    let date = new Date();
+    let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+    let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
+    let cmdLineArg = ["--query", "--date", "2019-11-28", "--empId", "1"];
+    let actual = performQueryCmd(
+      cmdLineArg,
+      [{ id: "1", beverage: "orange", qty: 3, dateAndTime: date }],
+      "./test/testFile"
+    );
+    assert.deepStrictEqual(actual, expected);
+  });
 });
 
-//----------------------------testTotal-----------------------------
+//----------------------------testTotal----------------------------
 
 describe("testTotal", function() {
-  it("should return 0 if the qty is 0", function() {
+  it("should return 0 when the quantity is 0", function() {
     assert.strictEqual(total(0, { qty: 0 }), 0);
   });
-  it("should return NaN if id the key is not present", function() {
+  it("should return NaN when qty key is not present", function() {
     assert.isNaN(total(0, { beverage: "orange" }));
   });
-  it("should return NaN if the object is empty", function() {
+  it("should return NaN when the object is empty", function() {
     assert.isNaN(total(0, {}));
   });
-  it("should return the total if the quantity key is present", function() {
+  it("should return the total when the quantity key is present", function() {
     assert.strictEqual(total(0, { qty: 6 }), 6);
   });
 });

@@ -18,12 +18,12 @@ const executeCmd = function(args, utilFunc, path) {
     "--save": performSaveCmd,
     "--query": performQueryCmd
   };
-  let previousData = utilFunc.getBeverageRecord(path);
+  let beverageRecord = utilFunc.getBeverageRecord(path);
   let pairs = getPair(args.slice(1));
   let isArgsValid = isValidSaveArgs(pairs, args);
-  isArgsValid = isArgsValid || isValidQueryArgs(pairs, args, previousData);
+  isArgsValid = isArgsValid || isValidQueryArgs(pairs, args, beverageRecord);
   if (isArgsValid) {
-    return transactionFuncs[args[0]](args, previousData, utilFunc, path);
+    return transactionFuncs[args[0]](args, beverageRecord, utilFunc, path);
   }
   return getUsageMsg();
 };

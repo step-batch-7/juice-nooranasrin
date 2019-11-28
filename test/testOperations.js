@@ -3,9 +3,10 @@ const operations = require("../src/operations");
 const {
   executeEmpIdQuery,
   save,
-  extractEachEmp,
+  addNewTransaction,
   isTransOfTheDay,
-  executeDateQuery
+  executeDateQuery,
+  isThisEmployee
 } = operations;
 
 //-----------------------------------------testSave-----------------------------------
@@ -37,6 +38,35 @@ describe("testSave", function() {
       utilFunc
     );
     assert.deepStrictEqual(actual, expected);
+    assert(Array.isArray(actual));
+  });
+
+  it("it should push an empty object into the array when the object is empty", function() {
+    let date = new Date();
+    let expected = [{}];
+
+    const recordTransaction = function(path, allTrans) {
+      assert.equal("./test/testFile", path);
+      assert.deepStrictEqual([{}], allTrans);
+    };
+    let utilFunc = { recordTransaction, recordTransaction };
+    let actual = save([], {}, "./test/testFile", utilFunc);
+    assert(Array.isArray(actual));
+    assert.deepStrictEqual(actual, expected);
+  });
+
+  it("it should push the input data to the array when the input is not an object", function() {
+    let date = new Date();
+    let expected = [1];
+
+    const recordTransaction = function(path, allTrans) {
+      assert.equal("./test/testFile", path);
+      assert.deepStrictEqual([1], allTrans);
+    };
+    let utilFunc = { recordTransaction, recordTransaction };
+    let actual = save([], 1, "./test/testFile", utilFunc);
+    assert(Array.isArray(actual));
+    assert.deepStrictEqual(actual, expected);
   });
 
   it("should add new details to the array when the array contains some elements", function() {
@@ -67,18 +97,31 @@ describe("testSave", function() {
       utilFunc
     );
     assert.deepStrictEqual(actual, expected);
+    assert(Array.isArray(actual));
   });
 });
 
 //----------------------------------testExecuteEmpIdQuery-----------------------------
 
-describe("testQuery", function() {
+describe("testEmpIdQuery", function() {
   let date = new Date().toJSON();
   it("should return an empty array when the previous value is an empty array", function() {
     let expected = [];
     let actual = executeEmpIdQuery([], ["--empId", "1"]);
+    assert(Array.isArray(actual));
     assert.deepStrictEqual(actual, expected);
   });
+
+  it("should return an empty array when the previous date doesnot have that employee", function() {
+    let expected = [];
+    let actual = executeEmpIdQuery(
+      [{ id: "2", beverage: "orange", qty: "2", dateAndTime: date }],
+      ["--empId", "1"]
+    );
+    assert(Array.isArray(actual));
+    assert.deepStrictEqual(actual, expected);
+  });
+
   it("should return the details of all transactions of that perticular employee when the employee is present", function() {
     let expected = [
       { id: "1", beverage: "orange", qty: 2, dateAndTime: 45 },
@@ -90,6 +133,7 @@ describe("testQuery", function() {
       { id: "2", beverage: "apple", qty: 1, dateAndTime: 65 }
     ];
     let actual = executeEmpIdQuery(testInput, ["--empId", "1"]);
+    assert(Array.isArray(actual));
     assert.deepStrictEqual(actual, expected);
   });
 });
@@ -101,20 +145,22 @@ describe("testIsTransOfTheDay", function() {
     let date = "2019-11-27";
     let empTrans = { id: "111", dateAndTime: "2019-11-27" };
     let actual = isTransOfTheDay(date, empTrans);
-    assert.ok(actual);
+    assert.isBoolean(actual);
+    assert.isTrue(actual);
   });
   it("should return false when the transaction date and input date are not equal", function() {
     let date = "2019-11-27";
     let empTrans = { id: "111", dateAndTime: "2019-11-26" };
     let actual = isTransOfTheDay(date, empTrans);
-    assert.ok(!actual);
+    assert.isBoolean(actual);
+    assert.isFalse(actual);
   });
 });
 
 //----------------------------------------testExecuteDateQuery------------------
 
 describe("testExecuteDateQuery", function() {
-  it("should return transactions of a perticular employee on a perticular day", function() {
+  it("should return transactions of an employee on a day when the input contains empId and date", function() {
     let allTrans = [
       { id: "111", dateAndTime: "2020-11-27" },
       { id: "111", dateAndTime: "2020-11-26" }
@@ -122,9 +168,10 @@ describe("testExecuteDateQuery", function() {
     let args = ["--query", "--date", "2020-11-27", "--empId", "111"];
     let actual = executeDateQuery(allTrans, args);
     let expected = [{ id: "111", dateAndTime: "2020-11-27" }];
+    assert.isArray(actual);
     assert.deepStrictEqual(actual, expected);
   });
-  it("hould return informations about all those who made transaction in a perticular day", function() {
+  it("hould return informations about all those who made transaction in a day when the inputs contains only date", function() {
     allTrans = [
       { id: "111", dateAndTime: "2020-11-27" },
       { id: "111", dateAndTime: "2020-11-26" },
@@ -136,6 +183,27 @@ describe("testExecuteDateQuery", function() {
       { id: "112", dateAndTime: "2020-11-27" }
     ];
     actual = executeDateQuery(allTrans, args);
+    assert.isArray(actual);
     assert.deepStrictEqual(actual, expected);
+  });
+});
+
+//-----------------------------testAddNewTransaction--------------------//
+describe("testAddNewTransaction", function() {
+  it("should push the input date to the array", function() {
+    let expected = [1];
+    let actual = addNewTransaction([], 1);
+    assert.deepStrictEqual(actual, expected);
+  });
+});
+//--------------------------testIsThisEmployee-----------------------//
+describe("testIsThisEmployee", function() {
+  it("should return true when the employee exists", function() {
+    let actual = isThisEmployee("1", { id: "1" });
+    assert.isTrue(actual);
+  });
+  it("should return false when the employee is not exist", function() {
+    let actual = isThisEmployee("2", { id: "1" });
+    assert.isFalse(actual);
   });
 });
