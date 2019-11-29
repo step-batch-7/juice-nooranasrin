@@ -34,10 +34,10 @@ describe("getTransactionDetails", function() {
     let date = new Date().toJSON();
     let expected = "111,orange,3" + "," + date;
     let testInput = {
-      id: "111",
+      empId: "111",
       beverage: "orange",
       qty: "3",
-      dateAndTime: date
+      date: date
     };
     let actual = getTransactionDetails(testInput, 111);
     assert.deepStrictEqual(actual, expected);

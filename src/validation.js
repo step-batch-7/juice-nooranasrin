@@ -43,7 +43,7 @@ const isValidSavePair = function(pair) {
 };
 
 const isValidId = function(id, transactionDetails) {
-  return transactionDetails["id"] == id;
+  return transactionDetails.empId == id;
 };
 
 const isValidDate = function(date) {

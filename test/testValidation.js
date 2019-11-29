@@ -103,7 +103,7 @@ describe("testIsValidSavePair", function() {
 
 describe("testIsValidQueryPair", function() {
   it("should return true for option --empId and value is a number", function() {
-    assert.ok(isValidQueryPair([{ id: "111" }], ["--empId", "111"]));
+    assert.ok(isValidQueryPair([{ empId: "111" }], ["--empId", "111"]));
   });
   it("should return true for option --date and valid date", function() {
     assert.ok(isValidQueryPair([{ id: "111" }], ["--date", "2000-2-1"]));
@@ -117,10 +117,10 @@ describe("testIsValidQueryPair", function() {
 
 describe("testIsValidId", function() {
   it("should return true for existing id", function() {
-    assert.ok(isValidId("1", { id: "1" }));
+    assert.ok(isValidId("1", { empId: "1" }));
   });
   it("should return false for not existing id", function() {
-    assert.notOk(isValidId("2", { id: "1" }));
+    assert.notOk(isValidId("2", { empId: "1" }));
   });
 });
 
@@ -169,20 +169,20 @@ describe("testIsValidQueryArgs", function() {
   it("should return true for valid query arguments", function() {
     let pairs = [["--empId", "111"]];
     let cmdLineArg = ["--query", "--empId", "111"];
-    let previousData = [{ id: "111" }];
+    let previousData = [{ empId: "111" }];
     assert.ok(isValidQueryArgs(pairs, cmdLineArg, previousData));
     pairs = [
       ["--empId", "111"],
       ["--date", "2000-2-9"]
     ];
     cmdLineArg = ["--query", "--empId", "111", "--date", "2000-2-9"];
-    previousData = [{ id: "111" }];
+    previousData = [{ empId: "111" }];
     assert.ok(isValidQueryArgs(pairs, cmdLineArg, previousData));
   });
   it("should return false for invalid query arguments", function() {
     let pairs = [["--empId", "111"]];
     let cmdLineArg = ["--save", "--empId", "111"];
-    let previousData = [{ id: "111" }];
+    let previousData = [{ empId: "111" }];
     assert.ok(!isValidQueryArgs(pairs, cmdLineArg, previousData));
   });
 });

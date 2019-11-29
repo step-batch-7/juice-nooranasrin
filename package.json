@@ -5,7 +5,7 @@
   "main": "beverage.js",
   "scripts": {
     "test": "mocha",
-    "start": "node beverage.js --query --empId 111"
+    "start": "node beverage.js --save --beverage orange --empId 1111 --qty 1"
   },
   "author": "",
   "license": "ISC",

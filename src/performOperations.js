@@ -3,7 +3,10 @@ const {
   save,
   executeEmpIdQuery,
   executeDateQuery,
-  executeBeverageQuery
+  executeBeverageQuery,
+  isKeyPresent,
+  isTransOfTheDay,
+  executeQuery
 } = operations;
 const printMsg = require("./printingMessegeLib");
 const { getSaveMessage, getHeader, getTransactionDetails } = printMsg;
@@ -13,42 +16,34 @@ const total = function(totalQty, transaction) {
   return totalQty + quantity;
 };
 
-const getNewTransaction = function(cmdLineArg, date) {
-  let id = cmdLineArg[cmdLineArg.indexOf("--empId") + 1];
-  let qty = cmdLineArg[cmdLineArg.indexOf("--qty") + 1];
-  let beverage = cmdLineArg[cmdLineArg.indexOf("--beverage") + 1];
-  let newTransaction = {
-    id: id,
-    beverage: beverage,
-    qty: qty,
-    dateAndTime: date
-  };
-  return newTransaction;
-};
-
 const performSaveCmd = function(args, previousData, utilFunc, path) {
-  let date = utilFunc.generateDate().toJSON();
-  let id = args[args.indexOf("--empId") + 1];
-  let newTransaction = getNewTransaction(args, date);
+  let date = utilFunc.generateDate();
+  let cmdLineArg = [...args, "--date", date];
+  let newTransaction = getNewTransactionObj(cmdLineArg);
   let savedDetails = save(previousData, newTransaction, path, utilFunc);
+  savedDetails[0].date = savedDetails[0].date.toJSON();
   savedDetails = savedDetails.map(getTransactionDetails);
   return getSaveMessage() + getHeader() + savedDetails;
 };
 
-const performQueryCmd = function(args, previousData) {
-  let extractedTrans = executeEmpIdQuery(previousData, args);
-  if (args.includes("--date")) {
-    extractedTrans = executeDateQuery(previousData, args);
+const getNewTransactionObj = function(cmdLineArg) {
+  let args = {};
+  for (let index = 1; index < cmdLineArg.length; index += 2) {
+    args[cmdLineArg[index].slice(2)] = cmdLineArg[index + 1];
   }
-  if (args.includes("--beverage")) {
-    extractedTrans = executeBeverageQuery(previousData, args);
-  }
-  let totalTrans = extractedTrans.reduce(total, 0);
-  extractedTrans = extractedTrans.map(getTransactionDetails).join("\n");
-  return getHeader() + extractedTrans + "\n" + totalTrans;
+  return args;
 };
 
-exports.getNewTransaction = getNewTransaction;
+const performQueryCmd = function(args, previousData) {
+  const cmdLineArg = getNewTransactionObj(args);
+  const { beverage, date, empId } = cmdLineArg;
+  let extractedTrans = executeQuery(beverage, date, empId, previousData);
+  let totalTrans = extractedTrans.reduce(total, 0);
+  extractedTrans = extractedTrans.map(getTransactionDetails).join("\n");
+  return `${getHeader()}${extractedTrans}\nTotal: ${totalTrans} Juices`;
+};
+
+exports.getNewTransactionObj = getNewTransactionObj;
 exports.performSaveCmd = performSaveCmd;
 exports.performQueryCmd = performQueryCmd;
 exports.total = total;

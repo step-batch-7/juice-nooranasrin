@@ -9,11 +9,11 @@ const getHeader = function() {
 };
 
 const getTransactionDetails = function(transaction) {
-  let id = transaction["id"];
-  let beverage = transaction["beverage"];
-  let qty = transaction["qty"];
-  let date = transaction["dateAndTime"];
-  return `${id},${beverage},${qty},${date}`;
+  let empId = transaction.empId;
+  let beverage = transaction.beverage;
+  let qty = transaction.qty;
+  let date = transaction.date;
+  return `${empId},${beverage},${qty},${date}`;
 };
 
 const getUsageMsg = function() {

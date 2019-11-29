@@ -1,11 +1,8 @@
 const assert = require("chai").assert;
 const performOperations = require("../src/performOperations");
 const {
-  getNewTransaction,
-  getUsageMsg,
-  addNewTransaction,
+  getNewTransactionObj,
   total,
-  getTransactionDetails,
   performQueryCmd,
   performSaveCmd
 } = performOperations;
@@ -14,32 +11,25 @@ const {
 
 describe("testGetNewTransactionObj", function() {
   let date = new Date().toJSON();
-  it("should return an object", function() {
-    let actual = getNewTransaction([], date);
+  it("should give an object", function() {
+    let actual = getNewTransactionObj([]);
     assert.isObject(actual);
   });
   it("should create a new object with specified keys", function() {
-    let actual = getNewTransaction(
-      ["--beverage", "orange", "--qty", "1", "--empId", "111"],
+    let actual = getNewTransactionObj(
+      ["--save", "--beverage", "orange", "--qty", "1", "--empId", "111"],
       date
     );
     let expected = {
-      id: "111",
+      empId: "111",
       beverage: "orange",
-      qty: "1",
-      dateAndTime: date
+      qty: "1"
     };
-
     assert.deepStrictEqual(actual, expected);
   });
-  it("should assign undefined when the input doesnot contains the expected values", function() {
-    let actual = getNewTransaction([], date);
-    let expected = {
-      id: undefined,
-      beverage: undefined,
-      qty: undefined,
-      dateAndTime: date
-    };
+  it("should give an empty object when the input is an empty array", function() {
+    let actual = getNewTransactionObj([]);
+    let expected = {};
     assert.deepStrictEqual(actual, expected);
   });
 });
@@ -56,13 +46,8 @@ describe("testPerformSaveCmd", function() {
       assert.equal("./test/testFile", path);
       assert.deepStrictEqual(
         [
-          { id: "111", beverage: "orange", qty: 1, dateAndTime: date.toJSON() },
-          {
-            id: "111",
-            beverage: "orange",
-            qty: "2",
-            dateAndTime: date.toJSON()
-          }
+          { empId: "111", beverage: "orange", qty: 1, date: date.toJSON() },
+          { beverage: "orange", empId: "111", qty: "2", date: date }
         ],
         allTrans
       );
@@ -87,7 +72,7 @@ describe("testPerformSaveCmd", function() {
     ];
     let actual = performSaveCmd(
       cmdLineArg,
-      [{ id: "111", beverage: "orange", qty: 1, dateAndTime: date.toJSON() }],
+      [{ empId: "111", beverage: "orange", qty: 1, date: date.toJSON() }],
       utilFunc,
       "./test/testFile"
     );
@@ -98,40 +83,98 @@ describe("testPerformSaveCmd", function() {
 //----------------------------testPerformQueryCmd-----------------------------
 
 describe("testPerformQueryCmd", function() {
-  it("should return transactions of an employee when the input contains only empId", function() {
-    let date = new Date();
+  it("should give transactions of an employee when the input contains only empId", function() {
+    let date = new Date().toJSON();
     let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
-    let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
+    let expected =
+      printingMsg + 1 + "," + "orange,3," + date + "\nTotal: 3 Juices";
     let cmdLineArg = ["--query", "--empId", "1"];
     let actual = performQueryCmd(
       cmdLineArg,
-      [{ id: "1", beverage: "orange", qty: 3, dateAndTime: date }],
+      [{ empId: "1", beverage: "orange", qty: 3, date: date }],
       "./test/testFile"
     );
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return all transactions of the day when the input contains only date", function() {
-    let date = new Date();
+  it("should give transactions of a beverage when the input contains only beverage", function() {
+    let date = new Date().toJSON();
     let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
-    let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
+    let expected =
+      printingMsg + 1 + "," + "orange,3," + date + "\nTotal: 3 Juices";
+    let cmdLineArg = ["--query", "--beverage", "orange"];
+    let actual = performQueryCmd(
+      cmdLineArg,
+      [{ empId: "1", beverage: "orange", qty: 3, date: date }],
+      "./test/testFile"
+    );
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should give all transactions of the day when the input contains only date", function() {
+    let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+    let expected =
+      printingMsg + 1 + "," + "orange,3,2019-11-28\nTotal: 3 Juices";
     let cmdLineArg = ["--query", "--date", "2019-11-28"];
     let actual = performQueryCmd(
       cmdLineArg,
-      [{ id: "1", beverage: "orange", qty: 3, dateAndTime: date }],
+      [{ empId: "1", beverage: "orange", qty: 3, date: "2019-11-28" }],
       "./test/testFile"
     );
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return transactions of an employee in a day when the input contains both empId and date", function() {
-    let date = new Date();
+  it("should give transactions of an employee in a day when the input contains both empId and date", function() {
     let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
-    let expected = printingMsg + 1 + "," + "orange,3," + date + "\n3";
+    let expected =
+      printingMsg + 1 + "," + "orange,3,2019-11-28\nTotal: 3 Juices";
     let cmdLineArg = ["--query", "--date", "2019-11-28", "--empId", "1"];
     let actual = performQueryCmd(
       cmdLineArg,
-      [{ id: "1", beverage: "orange", qty: 3, dateAndTime: date }],
+      [{ empId: "1", beverage: "orange", qty: 3, date: "2019-11-28" }],
       "./test/testFile"
     );
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should give transactions of an employee on perticular beverage when the options are id and beverage", function() {
+    let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+    let expected =
+      printingMsg + 1 + "," + "orange,3,2019-11-28\nTotal: 3 Juices";
+    let cmdLineArg = ["--query", "--beverage", "orange", "--empId", "1"];
+    let actual = performQueryCmd(cmdLineArg, [
+      { empId: "1", beverage: "orange", qty: 3, date: "2019-11-28" }
+    ]);
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should give transactions on a day on a perticular beverage when the options are date and beverage", function() {
+    let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+    let expected =
+      printingMsg + 1 + "," + "orange,3,2019-11-28\nTotal: 3 Juices";
+    let cmdLineArg = [
+      "--query",
+      "--beverage",
+      "orange",
+      "--date",
+      "2019-11-28"
+    ];
+    let actual = performQueryCmd(cmdLineArg, [
+      { empId: "1", beverage: "orange", qty: 3, date: "2019-11-28" }
+    ]);
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should give transactions of an employee on a day on a perticular beverage when the options are id,date and beverage", function() {
+    let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+    let expected =
+      printingMsg + 1 + "," + "orange,3,2019-11-28\nTotal: 3 Juices";
+    let cmdLineArg = [
+      "--query",
+      "--beverage",
+      "orange",
+      "--date",
+      "2019-11-28",
+      "--empId",
+      "1"
+    ];
+    let actual = performQueryCmd(cmdLineArg, [
+      { empId: "1", beverage: "orange", qty: 3, date: "2019-11-28" }
+    ]);
     assert.deepStrictEqual(actual, expected);
   });
 });
