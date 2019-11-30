@@ -21,14 +21,14 @@ const getBeverageRecord = function(fileOperations) {
   return read(path, encoding);
 };
 
-const getFileOperations = function() {
+const getFileOperations = function(path) {
   let fileOperations = {};
   fileOperations.read = fs.readFileSync;
   fileOperations.write = fs.writeFileSync;
   fileOperations.exist = fs.existsSync;
   fileOperations.encoding = "utf8";
   fileOperations.content = "[]";
-  fileOperations.path = "./transactionDetails.json";
+  fileOperations.path = path;
   return fileOperations;
 };
 

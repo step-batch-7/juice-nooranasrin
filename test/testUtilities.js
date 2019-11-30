@@ -103,7 +103,7 @@ describe("testFileOperations", function() {
       content: "[]",
       path: "./transactionDetails.json"
     };
-    let actual = getFileOperations();
+    let actual = getFileOperations("./transactionDetails.json");
     assert.deepStrictEqual(actual, expected);
   });
 });

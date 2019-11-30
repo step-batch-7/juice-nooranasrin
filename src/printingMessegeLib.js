@@ -3,7 +3,11 @@ const getSaveMessage = function() {
 };
 
 const getHeader = function() {
-  return `Employee ID,Beverage,Quantity,Date\n`;
+  return `Employee ID, Beverage, Quantity, Date\n`;
+};
+
+const getTotalMsg = function(total) {
+  return total == 1 ? `Total: ${total} Juice` : `Total: ${total} Juices`;
 };
 
 const getTransactionDetails = function(transaction) {
@@ -28,3 +32,4 @@ exports.getSaveMessage = getSaveMessage;
 exports.getHeader = getHeader;
 exports.getTransactionDetails = getTransactionDetails;
 exports.getUsageMsg = getUsageMsg;
+exports.getTotalMsg = getTotalMsg;

@@ -4,7 +4,8 @@ const {
   getSaveMessage,
   getHeader,
   getTransactionDetails,
-  getUsageMsg
+  getUsageMsg,
+  getTotalMsg
 } = printMsg;
 
 //-------------------------getSaveMessage-------------------------------
@@ -21,7 +22,7 @@ describe("getSaveMessage", function() {
 
 describe("getHeader", function() {
   it("should return the expected string back", function() {
-    let expected = "Employee ID,Beverage,Quantity,Date\n";
+    let expected = "Employee ID, Beverage, Quantity, Date\n";
     let actual = getHeader();
     assert.deepStrictEqual(actual, expected);
   });
@@ -56,5 +57,20 @@ describe("testGetUsageMsg", function() {
     usageQuery = usageQuery + "--query --date [valid date]";
     let expected = usageSave + usageQuery;
     assert.strictEqual(getUsageMsg(), expected);
+  });
+});
+
+//----------------------------------testTotalMsg--------------------------
+
+describe("testTotalMsg", function() {
+  it("should return Total: 1 Juice", function() {
+    let actual = getTotalMsg(1);
+    let expected = `Total: 1 Juice`;
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should return Total: 2 Juices", function() {
+    let actual = getTotalMsg(2);
+    let expected = `Total: 2 Juices`;
+    assert.deepStrictEqual(actual, expected);
   });
 });

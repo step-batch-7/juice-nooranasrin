@@ -70,7 +70,7 @@ describe("testExecuteCmd", function() {
       "2"
     ];
     let expected =
-      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date\n";
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date\n";
     expected = expected + "111,orange,2," + date.toJSON();
     let actual = executeCmd(args, fileOperations, dateAndTime);
     assert.deepStrictEqual(actual, expected);
@@ -112,7 +112,7 @@ describe("testExecuteCmd", function() {
     let dateAndTime = () => date;
 
     let expected =
-      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date" +
+      "Transaction Recorded:\nEmployee ID, Beverage, Quantity, Date" +
       "\n" +
       "111,orange,2," +
       date.toJSON();
@@ -156,7 +156,7 @@ describe("testExecuteCmd", function() {
       path: "./test/testFile"
     };
 
-    let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
+    let printingMsg = "Employee ID, Beverage, Quantity, Date\n";
     let expected = printingMsg + "1,orange,2,1998-08-28\nTotal: 2 Juices";
     let cmdLineArg = ["--query", "--empId", "1"];
     let actual = executeCmd(cmdLineArg, fileOperations, dateAndTime);

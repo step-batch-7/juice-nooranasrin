@@ -9,7 +9,12 @@ const {
   executeQuery
 } = operations;
 const printMsg = require("./printingMessegeLib");
-const { getSaveMessage, getHeader, getTransactionDetails } = printMsg;
+const {
+  getSaveMessage,
+  getHeader,
+  getTransactionDetails,
+  getTotalMsg
+} = printMsg;
 
 const total = function(totalQty, transaction) {
   let quantity = +transaction.qty;
@@ -40,7 +45,7 @@ const performQueryCmd = function(args, previousData) {
   let extractedTrans = executeQuery(beverage, date, empId, previousData);
   let totalTrans = extractedTrans.reduce(total, 0);
   extractedTrans = extractedTrans.map(getTransactionDetails).join("\n");
-  return `${getHeader()}${extractedTrans}\nTotal: ${totalTrans} Juices`;
+  return `${getHeader()}${extractedTrans}\n${getTotalMsg(totalTrans)}`;
 };
 
 exports.getNewTransactionObj = getNewTransactionObj;
