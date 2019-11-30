@@ -6,9 +6,9 @@ const addNewTransaction = function(beverageRecords, newTransaction) {
   return beverageLog;
 };
 
-const save = function(beverageRecords, newTransaction, path, utilFuc) {
+const save = function(beverageRecords, newTransaction, fileOperations) {
   let beverageLog = addNewTransaction(beverageRecords, newTransaction);
-  utilFuc.recordTransaction(path, beverageLog);
+  recordTransaction(beverageLog, fileOperations);
   return [newTransaction];
 };
 //------------------------------------------------------------------------------//

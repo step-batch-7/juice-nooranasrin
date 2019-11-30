@@ -1,22 +1,37 @@
 const fs = require("fs");
 
-const recordTransaction = function(path, transactionObj) {
+const recordTransaction = function(transactionObj, fileOperations) {
+  let encoding = fileOperations.encoding;
+  let write = fileOperations.write;
+  let path = fileOperations.path;
   let transactionStr = JSON.stringify(transactionObj);
-  fs.writeFileSync(path, transactionStr, "utf8");
+  write(path, transactionStr, encoding);
 };
 
-const getBeverageRecord = function(path) {
-  if (!fs.existsSync(path) || fs.readFileSync(path, "utf8") == "") {
-    fs.writeFileSync(path, "[]", "utf8");
+const getBeverageRecord = function(fileOperations) {
+  let exist = fileOperations.exist;
+  let read = fileOperations.read;
+  let write = fileOperations.write;
+  let encoding = fileOperations.encoding;
+  let content = fileOperations.content;
+  let path = fileOperations.path;
+  if (!exist(path) || read(path, encoding) == "") {
+    write(path, content, encoding);
   }
-  let previousData = fs.readFileSync(path, "utf8");
-  return JSON.parse(previousData);
+  return read(path, encoding);
 };
 
-const generateDate = function() {
-  return new Date();
+const getFileOperations = function() {
+  let fileOperations = {};
+  fileOperations.read = fs.readFileSync;
+  fileOperations.write = fs.writeFileSync;
+  fileOperations.exist = fs.existsSync;
+  fileOperations.encoding = "utf8";
+  fileOperations.content = "[]";
+  fileOperations.path = "./transactionDetails.json";
+  return fileOperations;
 };
 
 exports.getBeverageRecord = getBeverageRecord;
 exports.recordTransaction = recordTransaction;
-exports.generateDate = generateDate;
+exports.getFileOperations = getFileOperations;

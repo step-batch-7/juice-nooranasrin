@@ -108,6 +108,11 @@ describe("testIsValidQueryPair", function() {
   it("should return true for option --date and valid date", function() {
     assert.ok(isValidQueryPair([{ id: "111" }], ["--date", "2000-2-1"]));
   });
+  it("should return true for option --beverage and valid date", function() {
+    assert.ok(
+      isValidQueryPair([{ beverage: "orange" }], ["--beverage", "orange"])
+    );
+  });
   it("should return false for all other combinations", function() {
     assert.ok(!isValidQueryPair([{ id: "111" }], ["--beverage", "123"]));
   });
@@ -178,7 +183,24 @@ describe("testIsValidQueryArgs", function() {
     cmdLineArg = ["--query", "--empId", "111", "--date", "2000-2-9"];
     previousData = [{ empId: "111" }];
     assert.ok(isValidQueryArgs(pairs, cmdLineArg, previousData));
+    pairs = [
+      ["--empId", "111"],
+      ["--date", "2000-2-9"],
+      ["--beverage", "orange"]
+    ];
+    cmdLineArg = [
+      "--query",
+      "--empId",
+      "111",
+      "--date",
+      "2000-2-9",
+      "--beverage",
+      "orange"
+    ];
+    previousData = [{ empId: "111" }];
+    assert.ok(isValidQueryArgs(pairs, cmdLineArg, previousData));
   });
+
   it("should return false for invalid query arguments", function() {
     let pairs = [["--empId", "111"]];
     let cmdLineArg = ["--save", "--empId", "111"];

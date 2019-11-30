@@ -1,8 +1,8 @@
 const validation = require("./validation");
 const { isValidSaveArgs, isValidQueryArgs } = validation;
-const printMsg = require("./printingMessegeLib");
-const { getUsageMsg } = printMsg;
+const getUsageMsg = require("./printingMessegeLib").getUsageMsg;
 const transactions = require("./performOperations");
+const getBeverageRecord = require("./utilities").getBeverageRecord;
 const { performSaveCmd, performQueryCmd } = transactions;
 
 const getPair = function(cmdLineArg) {
@@ -13,17 +13,17 @@ const getPair = function(cmdLineArg) {
   return pairs;
 };
 
-const executeCmd = function(args, utilFunc, path) {
+const executeCmd = function(args, fileOperations, date) {
   let transactionFuncs = {
     "--save": performSaveCmd,
     "--query": performQueryCmd
   };
-  let beverageRecord = utilFunc.getBeverageRecord(path);
+  let beverageLog = JSON.parse(getBeverageRecord(fileOperations));
   let pairs = getPair(args.slice(1));
   let isArgsValid = isValidSaveArgs(pairs, args);
-  isArgsValid = isArgsValid || isValidQueryArgs(pairs, args, beverageRecord);
+  isArgsValid = isArgsValid || isValidQueryArgs(pairs, args, beverageLog);
   if (isArgsValid) {
-    return transactionFuncs[args[0]](args, beverageRecord, utilFunc, path);
+    return transactionFuncs[args[0]](args, beverageLog, fileOperations, date);
   }
   return getUsageMsg();
 };

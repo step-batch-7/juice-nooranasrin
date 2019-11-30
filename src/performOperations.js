@@ -16,11 +16,11 @@ const total = function(totalQty, transaction) {
   return totalQty + quantity;
 };
 
-const performSaveCmd = function(args, previousData, utilFunc, path) {
-  let date = utilFunc.generateDate();
-  let cmdLineArg = [...args, "--date", date];
+const performSaveCmd = function(args, previousData, fileOperations, date) {
+  let timeStamp = date();
+  let cmdLineArg = [...args, "--date", timeStamp];
   let newTransaction = getNewTransactionObj(cmdLineArg);
-  let savedDetails = save(previousData, newTransaction, path, utilFunc);
+  let savedDetails = save(previousData, newTransaction, fileOperations);
   savedDetails[0].date = savedDetails[0].date.toJSON();
   savedDetails = savedDetails.map(getTransactionDetails);
   return getSaveMessage() + getHeader() + savedDetails;

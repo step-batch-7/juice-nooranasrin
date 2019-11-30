@@ -38,29 +38,40 @@ describe("testGetNewTransactionObj", function() {
 
 describe("testPerformSaveCmd", function() {
   it("should save the input transaction", function() {
-    let date = new Date();
-    const generateDate = function() {
-      return date;
-    };
-    const recordTransaction = function(path, allTrans) {
-      assert.equal("./test/testFile", path);
-      assert.deepStrictEqual(
-        [
-          { empId: "111", beverage: "orange", qty: 1, date: date.toJSON() },
-          { beverage: "orange", empId: "111", qty: "2", date: date }
-        ],
-        allTrans
+    const write = function(path, content, encoding) {
+      assert.strictEqual("./test/testFile", path);
+      assert.strictEqual(
+        JSON.stringify([
+          {
+            empId: "111",
+            beverage: "orange",
+            qty: 1,
+            date: dateAndTime.toJSON()
+          },
+          { beverage: "orange", empId: "111", qty: "2", date: dateAndTime }
+        ]),
+        content
       );
+      assert.strictEqual("utf8", encoding);
     };
-    let utilFunc = {
-      generateDate: generateDate,
-      recordTransaction: recordTransaction
+
+    let fileOperations = {
+      write: write,
+      encoding: "utf8",
+      content: "[]",
+      path: "./test/testFile"
     };
+
+    let dateAndTime = new Date();
+    const date = function() {
+      return dateAndTime;
+    };
+
     let expected =
       "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date" +
       "\n" +
       "111,orange,2," +
-      date.toJSON();
+      dateAndTime.toJSON();
     let cmdLineArg = [
       "--save",
       "--beverage",
@@ -72,9 +83,11 @@ describe("testPerformSaveCmd", function() {
     ];
     let actual = performSaveCmd(
       cmdLineArg,
-      [{ empId: "111", beverage: "orange", qty: 1, date: date.toJSON() }],
-      utilFunc,
-      "./test/testFile"
+      [
+        { empId: "111", beverage: "orange", qty: 1, date: dateAndTime.toJSON() }
+      ],
+      fileOperations,
+      date
     );
     assert.deepStrictEqual(actual, expected);
   });

@@ -55,8 +55,8 @@ const isValidDate = function(date) {
 const isValidQueryPair = function(allTransactions, pair) {
   let isIdValid = allTransactions.filter(isValidId.bind(null, pair[1]));
   isIdValid = isIdValid.length > 0 && isValidNumber(pair[1]);
-  let isDateValid = isValidDate(pair[1]);
-  let isBeverageValid = isValidBeverage(pair[1]);
+  let isDateValid = pair[1] && isValidDate(pair[1]);
+  let isBeverageValid = pair[1] && isValidBeverage(pair[1]);
   isBeverageValid = isBeverageValid && pair[0] == "--beverage";
   isIdValid = isIdValid && pair[0] == "--empId";
   isDateValid = isDateValid && pair[0] == "--date";

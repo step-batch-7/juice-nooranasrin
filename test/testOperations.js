@@ -12,88 +12,101 @@ const {
 
 describe("testSave", function() {
   it("it should push an object into the array when the array is empty", function() {
-    let date = new Date();
-    let expected = [
-      {
-        beverage: "orange",
-        qty: "1",
-        date: date,
-        empId: "1"
-      }
-    ];
-
-    const recordTransaction = function(path, allTrans) {
-      assert.equal("./test/testFile", path);
-      assert.deepStrictEqual(
-        [{ empId: "1", beverage: "orange", qty: "1", date: date }],
-        allTrans
-      );
+    const write = function(path, content, encoding) {
+      assert.strictEqual("./test/testFile", path);
+      assert.strictEqual(JSON.stringify([{ beverage: "orange" }]), content);
+      assert.strictEqual("utf8", encoding);
     };
-    let utilFunc = { recordTransaction, recordTransaction };
-    let actual = save(
-      [],
-      { empId: "1", beverage: "orange", qty: "1", date: date },
-      "./test/testFile",
-      utilFunc
-    );
+
+    let fileOperations = {
+      write: write,
+      encoding: "utf8",
+      content: "[]",
+      path: "./test/testFile"
+    };
+
+    let expected = [{ beverage: "orange" }];
+    let actual = save([], { beverage: "orange" }, fileOperations);
     assert.deepStrictEqual(actual, expected);
     assert(Array.isArray(actual));
   });
 
   it("it should push an empty object into the array when the object is empty", function() {
-    let date = new Date();
-    let expected = [{}];
-
-    const recordTransaction = function(path, allTrans) {
-      assert.equal("./test/testFile", path);
-      assert.deepStrictEqual([{}], allTrans);
+    const write = function(path, content, encoding) {
+      assert.strictEqual("./test/testFile", path);
+      assert.strictEqual(JSON.stringify([{}]), content);
+      assert.strictEqual("utf8", encoding);
     };
-    let utilFunc = { recordTransaction, recordTransaction };
-    let actual = save([], {}, "./test/testFile", utilFunc);
+
+    let fileOperations = {
+      write: write,
+      encoding: "utf8",
+      content: "[]",
+      path: "./test/testFile"
+    };
+
+    let expected = [{}];
+    let actual = save([], {}, fileOperations);
     assert(Array.isArray(actual));
     assert.deepStrictEqual(actual, expected);
   });
 
   it("it should push the input data to the array when the input is not an object", function() {
-    let date = new Date();
-    let expected = [1];
-
-    const recordTransaction = function(path, allTrans) {
-      assert.equal("./test/testFile", path);
-      assert.deepStrictEqual([1], allTrans);
+    const write = function(path, content, encoding) {
+      assert.strictEqual("./test/testFile", path);
+      assert.strictEqual(JSON.stringify([1]), content);
+      assert.strictEqual("utf8", encoding);
     };
-    let utilFunc = { recordTransaction, recordTransaction };
-    let actual = save([], 1, "./test/testFile", utilFunc);
+
+    let fileOperations = {
+      write: write,
+      encoding: "utf8",
+      content: "[]",
+      path: "./test/testFile"
+    };
+
+    let expected = [1];
+    let actual = save([], 1, fileOperations);
     assert(Array.isArray(actual));
     assert.deepStrictEqual(actual, expected);
   });
 
   it("should add new details to the array when the array contains some elements", function() {
-    let date = new Date();
+    const write = function(path, content, encoding) {
+      assert.strictEqual("./test/testFile", path);
+      assert.strictEqual(
+        JSON.stringify([
+          { empId: "1" },
+          {
+            empId: "2",
+            beverage: "orange",
+            qty: "2"
+          }
+        ]),
+        content
+      );
+      assert.strictEqual("utf8", encoding);
+    };
+
+    let fileOperations = {
+      write: write,
+      encoding: "utf8",
+      content: "[]",
+      path: "./test/testFile"
+    };
+
     let expected = [
       {
         empId: "2",
         beverage: "orange",
-        qty: "2",
-        date: date
+        qty: "2"
       }
     ];
-    const recordTransaction = function(path, allTrans) {
-      assert.equal("./test/testFile", path);
-      assert.deepStrictEqual(
-        [
-          { empId: "1" },
-          { empId: "2", beverage: "orange", qty: "2", date: date }
-        ],
-        allTrans
-      );
-    };
-    let utilFunc = { recordTransaction: recordTransaction };
+
     let actual = save(
       [{ empId: "1" }],
-      { empId: "2", beverage: "orange", qty: "2", date: date },
-      "./test/testFile",
-      utilFunc
+      { empId: "2", beverage: "orange", qty: "2" },
+      fileOperations
     );
     assert.deepStrictEqual(actual, expected);
     assert(Array.isArray(actual));

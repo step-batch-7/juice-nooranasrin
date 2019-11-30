@@ -1,11 +1,9 @@
 const getSaveMessage = function() {
-  let printingMsg = "Transaction Recorded:\n";
-  return printingMsg;
+  return `Transaction Recorded:\n`;
 };
 
 const getHeader = function() {
-  let printingMsg = "Employee ID,Beverage,Quantity,Date\n";
-  return printingMsg;
+  return `Employee ID,Beverage,Quantity,Date\n`;
 };
 
 const getTransactionDetails = function(transaction) {
@@ -17,13 +15,13 @@ const getTransactionDetails = function(transaction) {
 };
 
 const getUsageMsg = function() {
-  let usageSave = "save ==> --save --beverage [beverageName]";
+  let usageSave = `save ==> --save --beverage [beverageName]`;
   usageSave = usageSave + " --empId [empId] --qty [quantity]\n ";
   let usageQuery = "query ==> --query --empId [existingEmployee]\n\t";
   usageQuery =
     usageQuery + "--query --empId [existingEmployee] --date [valid date]\n\t";
   usageQuery = usageQuery + "--query --date [valid date]";
-  return usageSave + usageQuery;
+  return `${usageSave}${usageQuery}`;
 };
 
 exports.getSaveMessage = getSaveMessage;
