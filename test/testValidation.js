@@ -7,7 +7,6 @@ const {
   isValidBeverage,
   isValidSavePair,
   isValidQueryPair,
-  isValidId,
   isValidSaveArgs,
   isValidQueryArgs,
   isValidDate
@@ -115,17 +114,6 @@ describe("testIsValidQueryPair", function() {
   });
   it("should return false for all other combinations", function() {
     assert.ok(!isValidQueryPair([{ id: "111" }], ["--beverage", "123"]));
-  });
-});
-
-//-------------------------------testIsValidId--------------------------------
-
-describe("testIsValidId", function() {
-  it("should return true for existing id", function() {
-    assert.ok(isValidId("1", { empId: "1" }));
-  });
-  it("should return false for not existing id", function() {
-    assert.notOk(isValidId("2", { empId: "1" }));
   });
 });
 

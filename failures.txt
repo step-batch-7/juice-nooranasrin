@@ -1,0 +1,73 @@
+---------appTest/preset_2_orange_juices_transactionData.json----------
+			<= command =>
+{
+
+			<= actual output =>
+./runAppTests.sh: eval: line 9: syntax error: unexpected end of file
+
+			<= expected output =>
+  "11111": [
+    {
+      "empId": 11111,
+      "beverage": "Orange",
+      "qty": 1,
+      "date": "2019-11-20T05:50:28.267Z"
+    },
+    {
+      "empId": 11111,
+      "beverage": "Watermelon",
+      "qty": 1,
+      "date": "2019-11-20T05:50:28.267Z"
+    }
+  ]
+}
+---------appTest/preset_for_save_only.json----------
+			<= command =>
+{"11111":[{"empId":11111,"beverage":"Orange","qty":1,"date":"2019-11-28T12:00:00.000Z"},{"empId":11111,"beverage":"Orange","qty":1,"date":"2019-11-28T12:00:00.000Z"},{"empId":11111,"beverage":"Orange","qty":1,"date":"2019-11-28T12:00:00.000Z"},{"empId":11111,"beverage":"Orange","qty":1,"date":"2019-11-28T12:00:00.000Z"},{"empId":11111,"beverage":"Orange","qty":1,"date":"2019-11-28T12:00:00.000Z"},{"empId":11111,"beverage":"Orange","qty":1,"date":"2019-11-28T12:00:00.000Z"},{"empId":11111,"beverage":"Orange","qty":1,"date":"2019-11-28T12:00:00.000Z"},{"empId":11111,"beverage":"Orange","qty":1,"date":"2019-11-28T12:00:00.000Z"},{"empId":11111,"beverage":"Orange","qty":1,"date":"2019-11-28T12:00:00.000Z"},{"empId":11111,"beverage":"Orange","qty":1,"date":"2019-11-28T12:00:00.000Z"}]}
+
+			<= actual output =>
+./runAppTests.sh: line 8: 11111:[empId:11111: command not found
+
+			<= expected output =>
+---------appTest/req_01_save_one_transaction.test----------
+			<= command =>
+(export NOW="2019-11-28T12:00:00.000Z"; export JUICE_TRANSACTIONS_STORE_PATH="./appTest/preset_for_save_only.json"; node beverage.js --save --beverage Orange --empId 11111 --qty 1)
+
+			<= actual output =>
+Anna Juice Ltd
+Transaction Recorded:
+Employee ID,Beverage,Quantity,Date
+11111,Orange,1,2019-11-30T01:53:12.989Z
+
+			<= expected output =>
+Transaction Recorded:
+Employee ID,Beverage,Quantity,Date
+11111,Orange,1,2019-11-28T12:00:00.000Z
+---------appTest/req_02_query_on_employee_id.test----------
+			<= command =>
+(export JUICE_TRANSACTIONS_STORE_PATH="./appTest/preset_2_orange_juices_transactionData.json" ; node beverage.js --query --empId 11111)
+
+			<= actual output =>
+Anna Juice Ltd
+Employee ID,Beverage,Quantity,Date
+11111,Orange,1,2019-11-30T01:53:12.989Z
+Total: 1 Juices
+
+			<= expected output =>
+Employee ID, Beverage, Quantity, Date
+11111,Orange,1,2019-11-20T05:50:28.267Z
+11111,Watermelon,1,2019-11-20T05:50:28.267Z
+Total: 2 Juices
+---------appTest/req_02_query_with_no_stored_transactions.test----------
+			<= command =>
+(export JUICE_TRANSACTIONS_STORE_PATH="missingFile.json" ; node beverage.js --query --empId 11111)
+
+			<= actual output =>
+Anna Juice Ltd
+Employee ID,Beverage,Quantity,Date
+11111,Orange,1,2019-11-30T01:53:12.989Z
+Total: 1 Juices
+
+			<= expected output =>
+Employee ID, Beverage, Quantity, Date
+Total: 0 Juices

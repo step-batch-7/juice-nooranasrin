@@ -42,10 +42,6 @@ const isValidSavePair = function(pair) {
   return isOptionValid && isNumberValid;
 };
 
-const isValidId = function(id, transactionDetails) {
-  return transactionDetails.empId == id;
-};
-
 const isValidDate = function(date) {
   let bits = date.split("-");
   let isDateValid = new Date(bits[0], bits[1] - 1, bits[2]);
@@ -53,8 +49,7 @@ const isValidDate = function(date) {
 };
 
 const isValidQueryPair = function(allTransactions, pair) {
-  let isIdValid = allTransactions.filter(isValidId.bind(null, pair[1]));
-  isIdValid = isIdValid.length > 0 && isValidNumber(pair[1]);
+  isIdValid = isValidNumber(pair[1]);
   let isDateValid = pair[1] && isValidDate(pair[1]);
   let isBeverageValid = pair[1] && isValidBeverage(pair[1]);
   isBeverageValid = isBeverageValid && pair[0] == "--beverage";
@@ -87,7 +82,6 @@ exports.isValidOption = isValidOption;
 exports.isValidBeverage = isValidBeverage;
 exports.isValidSavePair = isValidSavePair;
 exports.isValidQueryPair = isValidQueryPair;
-exports.isValidId = isValidId;
 exports.isValidSaveArgs = isValidSaveArgs;
 exports.isValidQueryArgs = isValidQueryArgs;
 exports.isValidDate = isValidDate;
